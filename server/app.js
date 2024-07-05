@@ -1,7 +1,8 @@
 /**
  * Title: app.js
- * Author: Professor Krasso
- * Date: 8/5/2023
+ * Author: Professor Krasso and Brock Hemsouvanh
+ * Date: 07/03/2024
+ * Updated: 07/05/2024 by Brock Hemsouvanh
  */
 'use strict'
 
@@ -9,15 +10,48 @@
 const express = require('express')
 const createServer = require('http-errors')
 const path = require('path')
+const userRoute = require("./routes/user-route")
+const swaggerJsdoc = require('swagger-jsdoc')
+const swaggerUi = require('swagger-ui-express')
 
 // Create the Express app
 const app = express()
+
+// Swagger definition
+const swaggerDefinition = {
+  openapi: '3.0.0',
+  info: {
+    title: 'BCRS API Documentation',
+    version: '1.0.0',
+    description: 'This is the API documentation for Bob’s Computer Repair Shop',
+  },
+  servers: [
+    {
+      url: 'http://localhost:3000',
+      description: 'Local server'
+    },
+  ],
+}
+
+// Options for the swagger docs
+const options = {
+  swaggerDefinition,
+  // Path to the API docs
+  apis: ['./server/routes/*.js'],
+}
+
+// Initialize swagger-jsdoc
+const swaggerSpec = swaggerJsdoc(options)
 
 // Configure the app
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 app.use(express.static(path.join(__dirname, '../dist/bcrs')))
 app.use('/', express.static(path.join(__dirname, '../dist/bcrs')))
+app.use("/api/users", userRoute); // Has to be before the middleware handlers
+
+// Swagger setup
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec))
 
 // error handler for 404 errors
 app.use(function(req, res, next) {

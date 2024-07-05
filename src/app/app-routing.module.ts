@@ -1,7 +1,7 @@
 /**
  * Title: app-routing.module.ts
- * Author: Professor Krasso
- * Date: 8/5/23
+ * Author: Professor Krasso and Brock Hemsouvanh  
+ * Date: 07/04/24
  */
 
 // imports statements
@@ -28,11 +28,6 @@ const routes: Routes = [
       }
     ]
   },
-  {
-    // path for the security module (e.g. login, register, forgot password, etc.)
-    path: 'security',
-    loadChildren: () => import('./security/security.module').then(m => m.SecurityModule)
-  }
 ];
 
 @NgModule({
