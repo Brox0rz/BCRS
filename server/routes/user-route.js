@@ -112,7 +112,7 @@ const router = express.Router();
  *         description: Internal Server Error
  */
 router.post("/", async (req, res) => {
-  console.log("Let's post something!");
+  console.log("Let's create a new user!");
   try {
     console.log(`email: ${req.body.email}`);
 
@@ -151,5 +151,58 @@ router.post("/", async (req, res) => {
   }
 });
 
+/**
+ * @swagger
+ * /api/users/{userId}:
+ *   delete:
+ *     summary: Disable a user
+ *     tags: [User]
+ *     parameters:
+ *       - in: path
+ *         name: userId
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: The ID of the user to disable
+ *     responses:
+ *       204:
+ *         description: User disabled successfully
+ *       400:
+ *         description: Bad Request
+ *       404:
+ *         description: Not Found
+ *       500:
+ *         description: Internal Server Error
+ */
+router.delete("/:userId", async (req, res) => {
+  console.log("Deleting user...beep, boop!");
+  try {
+    // Validate the userId parameter
+    const userId = req.params.userId;
+    if (!ObjectId.isValid(userId)) {
+      return res.status(400).send({ message: "Bad Request: Invalid userId" });
+    }
+
+    mongo(async (db) => {
+      // "Delete" the user document by setting isDisabled to true
+      const result = await db.collection("users").updateOne(
+        { _id: new ObjectId(userId) },
+        { $set: { isDisabled: true } } // User is not actually deleted, but updated to disabled status.
+      );
+
+      if (result.matchedCount === 0) {
+        return res.status(404).send({ message: "Not Found: User not found" });
+      }
+
+      // Send a 204 No Content response if the update was successful
+      res.status(204).send();
+    });
+  } catch (e) {
+    console.log(e);
+    res.status(500).send({
+      message: `Internal Server Error: ${e.message}`,
+    });
+  }
+});
 
 module.exports = router;  // end module.exports = router
