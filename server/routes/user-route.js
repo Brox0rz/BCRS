@@ -205,4 +205,115 @@ router.delete("/:userId", async (req, res) => {
   }
 });
 
+/**
+ * @swagger
+ * /api/users:
+ *  get:
+ *    summary: Find all users
+ *    tags: [User]
+ *    content: 
+ *      application/json:
+ *        schema: 
+ *          $ref: '#/components/schemas/User'
+ *    responses: 
+ *      200: 
+ *         description: Successful
+ *      400: 
+ *         description: Bad Request
+ *      404: 
+ *         description: Not Found
+ *      500: 
+ *         description: Internal Server Error
+ *       
+ */
+
+// findAllUsers
+router.get('/users', (req, res, next) => {
+  try {
+      
+      mongo(async db => {
+          const users = await db.collection('users').find(
+              {},
+              { projection: { userId: 1, firstName: 1, lastName: 1, email: 1, role: 1 } },
+          )
+          .sort({ userId: 1}) // sorts the results by userId ascending (1) or descending (-1)
+          .toArray() // convert the results to an array
+
+          console.log('users', users)
+
+          res.send(users)
+      }, next)
+  } catch (err) {
+      console.log('err', err)
+      next(err)
+  }
+});
+
+/**
+* @swagger
+* /api/users/:userId:
+*  get:
+*    summary: Find User By Id
+*    description: Find a user by id
+*    operationId: FindUser
+*    parameters:
+*      - name: id
+*        in: path
+*        required: true
+*        description: ID of user to retrieve
+*        schema: 
+*          type: string
+*     - $ref: '#/components/schemas/users
+*     responses: 
+*      200: 
+*         description: User successfully found
+*      400:
+*         description: Bad Request
+*      404:
+*          description: Not Found
+*      500: 
+*          description: Internal Server Error
+*  
+*/
+
+// findUserById
+router.get('/:userId', (req, res, next) => {
+  try {
+      let { userId } = req.params // user Id
+      userId = parseInt(userId, 10)
+
+      if (isNaN(userId)) {
+          // if userId is not a number
+          const err = new Error('input must be a number')
+          err.status = 400
+          console.log('err', err)
+          next(err)
+          return
+      }
+
+      mongo(async db => {
+
+          // find user by userId
+          const user = await db.collection('users').findOne(
+              { userId }, 
+              { projection: { userId: 1, firstName: 1, lastName: 1, email: 1, role: 1 } },
+          )
+
+          if (!user) {
+              // if the user is not found
+              const err = new Error('Unable to find user with userId' + userId)
+              err.status = 404
+              console.log('err', err)
+              next(err)
+              return
+          }
+
+          res.send(employee)
+      }, next)
+  } catch (e) {
+      console.log(e);
+      next(err)
+  }
+});
+
 module.exports = router;  // end module.exports = router
