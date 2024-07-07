@@ -2,6 +2,12 @@
  * Title: role.guard.ts
  * Author: Brock Hemsouvanh
  * Date: 07/06/2024
+ * 
+ * This code was developed with reference to the Angular documentation on Injectables:
+ * https://v17.angular.io/api/core/Injectable
+ * 
+ * Description: 
+ * RoleGuard service to protect routes based on user roles.
  */
 
 import { Injectable } from '@angular/core';
