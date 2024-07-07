@@ -1,7 +1,8 @@
 /**
  * Title: app-routing.module.ts
- * Author: Professor Krasso and Brock Hemsouvanh  
+ * Author: Professor Krasso and Brock Hemsouvanh
  * Date: 07/04/24
+ * Updated: 07/07/2024 by Brock Hemsouvanh
  */
 
 // imports statements
@@ -9,6 +10,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { BaseLayoutComponent } from './layouts/base-layout/base-layout.component';
 import { HomeComponent } from './home/home.component';
+import { NotFoundPageComponent } from './not-found-page/not-found-page.component';
 
 // routes array with a path, component, and title for each route in the application (e.g. home, about, contact, etc.)
 const routes: Routes = [
@@ -28,6 +30,11 @@ const routes: Routes = [
       }
     ]
   },
+  {
+    path: '**',
+    component: NotFoundPageComponent, // Route for 404 Not Found page
+    title: 'BCRS: 404 Not Found'
+  }
 ];
 
 @NgModule({

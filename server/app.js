@@ -2,13 +2,13 @@
  * Title: app.js
  * Author: Professor Krasso and Brock Hemsouvanh
  * Date: 07/03/2024
- * Updated: 07/05/2024 by Brock Hemsouvanh
+ * Updated: 07/07/2024 by Brock Hemsouvanh
  */
 'use strict'
 
 // Require statements
 const express = require('express')
-const createServer = require('http-errors')
+const createError = require('http-errors')
 const path = require('path')
 const userRoute = require("./routes/user-route")
 const swaggerJsdoc = require('swagger-jsdoc')
@@ -53,9 +53,14 @@ app.use("/api/users", userRoute); // Has to be before the middleware handlers
 // Swagger setup
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec))
 
+// Catch all other routes and return the Angular app index file
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, '../dist/bcrs/index.html'));
+});
+
 // error handler for 404 errors
 app.use(function(req, res, next) {
-  next(createServer(404)) // forward to error handler
+  next(createError(404)) // forward to error handler
 })
 
 // error handler for all other errors
