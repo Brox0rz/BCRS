@@ -316,4 +316,83 @@ router.get('/:userId', (req, res, next) => {
   }
 });
 
+/**
+ 
+updateUser
+@swagger
+/api/users/{userId}:
+put:
+tags: [User]
+description: API for update an user data
+summary: Update an user
+parameters:
+name: userId
+in: path
+description: The User ID requested by the user.
+required: true
+schema:
+type: string
+requestBody:
+description: Updating data request
+content:
+application/json:
+schema:
+required:
+role
+isDisabled
+properties:
+role:
+type: string
+isDisabled:
+type: boolean
+responses:
+'204':
+description: User updated successfully
+'400':
+description: Bad Request
+'404':
+description: User not found
+'500':
+description: Internal Server Error
+'501':
+description: Database Error
+*/
+
+router.get('/:userId', (req, res, next) => {
+  try{
+    let { userId } = req.params //employeeId
+    userId = parseInt(userId, 10) //parse the empId to an integer
+
+    // if the employee id is not a number a 400 error code
+    if (isNaN(userId)) {
+      const err = new Error('input must be a number')
+      err.status = 400
+      console.log('err', err)
+      next(err)
+      return // return to exit the function
+    }
+
+    mongo(async db => {
+      const userId = await db.collection('users').findOne(
+        { userId },
+        { projection: {userId:1, firstName: 1, lastName: 1, email: 1, role:1}}
+      )
+
+      if (!user) {
+
+        const err = new Error('Unable to find employee with empId' + userId)
+        err.status = 404
+        console.log('err', err) 
+        next(err)
+        return
+      }
+
+      res.send(employee)
+    }, next)
+
+  } catch (err) {
+    console.log('err', err)
+    next(err)
+  }
+})
 module.exports = router;  // end module.exports = router

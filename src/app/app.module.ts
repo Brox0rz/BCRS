@@ -16,6 +16,7 @@ import { NavComponent } from './layouts/nav/nav.component';
 import { FooterComponent } from './layouts/footer/footer.component';
 import { NotFoundPageComponent } from './not-found-page/not-found-page.component';
 import { AdminComponent } from './admin/admin.component';
+import { SigninComponent } from './signin/signin.component';
 
 @NgModule({
   declarations: [
@@ -25,7 +26,8 @@ import { AdminComponent } from './admin/admin.component';
     NavComponent,
     FooterComponent,
     NotFoundPageComponent,
-    AdminComponent
+    AdminComponent,
+    SigninComponent
   ],
   imports: [
     BrowserModule,
