@@ -1,1 +1,73 @@
-<nav></nav>
+<!--
+  Title: nav.component.html
+  Author: Brock Hemsouvanh
+  Date: 07/07/2024
+  Description: Navigation component template for BCRS application
+-->
+
+<nav class="navbar">
+  <!-- Brand link to home page -->
+  <a routerLink="/" class="navbar-brand">BCRS</a>
+
+  <!-- Toggler button for collapsed navbar on small screens -->
+  <button
+    class="navbar-toggler"
+    type="button"
+    data-bs-toggle="collapse"
+    data-bs-target="#navbarResponsive"
+    aria-controls="navbarResponsive"
+    aria-expanded="false"
+    aria-label="Toggle navigation"
+  >
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <!-- Navbar links -->
+  <div class="collapse navbar-collapse" id="navbarResponsive">
+    <ul class="navbar-nav">
+      <!-- Home link -->
+      <li class="nav-item">
+        <a routerLink="/home" class="nav-link">Home</a>
+      </li>
+      <!-- Services link -->
+      <li class="nav-item">
+        <a routerLink="/services" class="nav-link">Services</a>
+      </li>
+      <!-- FAQ link -->
+      <li class="nav-item">
+        <a routerLink="/faq" class="nav-link">FAQ</a>
+      </li>
+      <!-- Employee Directory link -->
+      <li class="nav-item">
+        <a routerLink="/employee-directory" class="nav-link">Employee Directory</a>
+      </li>
+
+      <!-- Sign In link (visible when not signed in) -->
+      <li *ngIf="!isSignedIn" class="nav-item">
+        <a class="nav-link" routerLink="/signin">Sign In</a>
+      </li>
+
+      <!-- Dropdown menu (visible when signed in) -->
+      <li *ngIf="isSignedIn" class="nav-item dropdown">
+        <a href="#"
+          class="nav-link"
+          id="navbarDropdown"
+          role="button"
+          data-bs-toggle="dropdown"
+          aria-expanded="false">
+          <span class="material-icons">person</span>
+        </a>
+
+        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <li class="dropdown-item">
+            Signed in as {{ appUser.fullName }}
+          </li>
+          <hr />
+          <li>
+            <a (click)="signout()" class="dropdown-item link">Sign Out</a>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </div>
+</nav>

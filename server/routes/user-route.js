@@ -2,7 +2,7 @@
  * Title: user-route.js
  * Author: Professor Richard Krasso and Brock Hemsouvanh
  * Date: 7/05/24
- * Updated: 7/05/24 by Brock Hemsouvanh
+ * Updated: 7/08/24 by Brock Hemsouvanh
  * Description: Route for handling user API requests
  */
 
@@ -211,20 +211,21 @@ router.delete("/:userId", async (req, res) => {
  *  get:
  *    summary: Find all users
  *    tags: [User]
- *    content: 
- *      application/json:
- *        schema: 
- *          $ref: '#/components/schemas/User'
  *    responses: 
  *      200: 
  *         description: Successful
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/User'
  *      400: 
  *         description: Bad Request
  *      404: 
  *         description: Not Found
  *      500: 
  *         description: Internal Server Error
- *       
  */
 
 // findAllUsers
@@ -250,149 +251,129 @@ router.get('/users', (req, res, next) => {
 });
 
 /**
-* @swagger
-* /api/users/:userId:
-*  get:
-*    summary: Find User By Id
-*    description: Find a user by id
-*    operationId: FindUser
-*    parameters:
-*      - name: id
-*        in: path
-*        required: true
-*        description: ID of user to retrieve
-*        schema: 
-*          type: string
-*     - $ref: '#/components/schemas/users
-*     responses: 
-*      200: 
-*         description: User successfully found
-*      400:
-*         description: Bad Request
-*      404:
-*          description: Not Found
-*      500: 
-*          description: Internal Server Error
-*  
-*/
+ * @swagger
+ * /api/users/{userId}:
+ *  get:
+ *    summary: Find User By Id
+ *    tags: [User]
+ *    parameters:
+ *      - name: userId
+ *        in: path
+ *        required: true
+ *        description: ID of user to retrieve
+ *        schema: 
+ *          type: string
+ *    responses: 
+ *      200: 
+ *         description: User successfully found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/User'
+ *      400:
+ *         description: Bad Request
+ *      404:
+ *         description: Not Found
+ *      500: 
+ *         description: Internal Server Error
+ */
 
 // findUserById
 router.get('/:userId', (req, res, next) => {
   try {
       let { userId } = req.params // user Id
-      userId = parseInt(userId, 10)
-
-      if (isNaN(userId)) {
-          // if userId is not a number
-          const err = new Error('input must be a number')
-          err.status = 400
-          console.log('err', err)
-          next(err)
-          return
-      }
+      userId = new ObjectId(userId);
 
       mongo(async db => {
 
           // find user by userId
           const user = await db.collection('users').findOne(
-              { userId }, 
+              { _id: userId }, 
               { projection: { userId: 1, firstName: 1, lastName: 1, email: 1, role: 1 } },
           )
 
           if (!user) {
               // if the user is not found
-              const err = new Error('Unable to find user with userId' + userId)
+              const err = new Error('Unable to find user with userId ' + userId)
               err.status = 404
               console.log('err', err)
               next(err)
               return
           }
 
-          res.send(employee)
+          res.send(user)
       }, next)
   } catch (e) {
       console.log(e);
-      next(err)
+      next(e)
   }
 });
 
 /**
- 
-updateUser
-@swagger
-/api/users/{userId}:
-put:
-tags: [User]
-description: API for update an user data
-summary: Update an user
-parameters:
-name: userId
-in: path
-description: The User ID requested by the user.
-required: true
-schema:
-type: string
-requestBody:
-description: Updating data request
-content:
-application/json:
-schema:
-required:
-role
-isDisabled
-properties:
-role:
-type: string
-isDisabled:
-type: boolean
-responses:
-'204':
-description: User updated successfully
-'400':
-description: Bad Request
-'404':
-description: User not found
-'500':
-description: Internal Server Error
-'501':
-description: Database Error
-*/
+ * @swagger
+ * /api/users/{userId}:
+ *   put:
+ *     tags: [User]
+ *     description: API for updating a user's data
+ *     summary: Update a user
+ *     parameters:
+ *       - name: userId
+ *         in: path
+ *         description: The User ID requested by the user.
+ *         required: true
+ *         schema:
+ *           type: string
+ *     requestBody:
+ *       description: Updating data request
+ *       content:
+ *         application/json:
+ *           schema:
+ *             required:
+ *               - role
+ *               - isDisabled
+ *             properties:
+ *               role:
+ *                 type: string
+ *               isDisabled:
+ *                 type: boolean
+ *     responses:
+ *       204:
+ *         description: User updated successfully
+ *       400:
+ *         description: Bad Request
+ *       404:
+ *         description: User not found
+ *       500:
+ *         description: Internal Server Error
+ *       501:
+ *         description: Database Error
+ */
 
-router.get('/:userId', (req, res, next) => {
-  try{
-    let { userId } = req.params //employeeId
-    userId = parseInt(userId, 10) //parse the empId to an integer
-
-    // if the employee id is not a number a 400 error code
-    if (isNaN(userId)) {
-      const err = new Error('input must be a number')
-      err.status = 400
-      console.log('err', err)
-      next(err)
-      return // return to exit the function
-    }
+router.put('/:userId', (req, res, next) => {
+  try {
+    let { userId } = req.params;
+    userId = new ObjectId(userId);
 
     mongo(async db => {
-      const userId = await db.collection('users').findOne(
-        { userId },
-        { projection: {userId:1, firstName: 1, lastName: 1, email: 1, role:1}}
-      )
+      const result = await db.collection('users').updateOne(
+        { _id: userId },
+        { $set: req.body }
+      );
 
-      if (!user) {
-
-        const err = new Error('Unable to find employee with empId' + userId)
-        err.status = 404
-        console.log('err', err) 
-        next(err)
-        return
+      if (result.matchedCount === 0) {
+        const err = new Error('Unable to find user with userId ' + userId);
+        err.status = 404;
+        console.log('err', err);
+        next(err);
+        return;
       }
 
-      res.send(employee)
-    }, next)
-
+      res.status(204).send();
+    }, next);
   } catch (err) {
-    console.log('err', err)
-    next(err)
+    console.log('err', err);
+    next(err);
   }
-})
-module.exports = router;  // end module.exports = router
+});
+
+module.exports = router;
