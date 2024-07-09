@@ -12,6 +12,7 @@ import { BaseLayoutComponent } from './layouts/base-layout/base-layout.component
 import { HomeComponent } from './home/home.component';
 import { AdminComponent } from './admin/admin.component';
 import { NotFoundPageComponent } from './not-found-page/not-found-page.component';
+import { SigninComponent } from './signin/signin.component';
 
 // routes array with a path, component, and title for each route in the application 
 // (e.g. home, about, contact, etc.)
@@ -29,6 +30,11 @@ const routes: Routes = [
         path: 'home',
         component: HomeComponent,
         title: 'BCRS: Home'
+      },
+      {
+        path: 'signin',
+        component: SigninComponent,
+        title: 'BCRS: Sign In'
       },
       {
         path: 'admin',

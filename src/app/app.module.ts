@@ -1,13 +1,14 @@
 /**
  * Title: app.module.ts
- * Author: Professor Krasso
+ * Author: Professor Krasso and Brock Hemsouvanh
  * Date: 8/5/23
+ * Updated: 07/08/2024 by Brock Hemsouvanh
  */
 
 // imports statements
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-
+import { ReactiveFormsModule } from '@angular/forms';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HomeComponent } from './home/home.component';
@@ -31,7 +32,8 @@ import { SigninComponent } from './signin/signin.component';
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    ReactiveFormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]
