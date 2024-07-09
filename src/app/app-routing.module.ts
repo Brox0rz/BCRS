@@ -2,7 +2,7 @@
  * Title: app-routing.module.ts
  * Author: Professor Krasso and Brock Hemsouvanh
  * Date: 07/04/24
- * Updated: 07/07/2024 by Brock Hemsouvanh
+ * Updated: 07/08/2024 by Brock Hemsouvanh
  */
 
 // imports statements
@@ -51,8 +51,12 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  // imports the RouterModule and defines the routes array and other options (e.g. useHash, enableTracing, scrollPositionRestoration)
-  imports: [RouterModule.forRoot(routes, { useHash: true, enableTracing: false, scrollPositionRestoration: 'enabled'})],
+  // imports the RouterModule and defines the routes array and other options 
+  // (e.g. useHash, enableTracing, scrollPositionRestoration)
+  imports: [RouterModule.forRoot(routes, { 
+    useHash: true, 
+    enableTracing: false, 
+    scrollPositionRestoration: 'enabled'})],
   exports: [RouterModule]
 })
 export class AppRoutingModule { }
