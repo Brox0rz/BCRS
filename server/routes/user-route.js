@@ -11,9 +11,7 @@
 const express = require("express");
 const { mongo } = require("../utils/mongo");
 const createError = require("http-errors");
-const Ajv = require('ajv');
 const { ObjectId } = require('mongodb');
-const ajv = new Ajv(); // create a new instance of the Ajv object from the npm package
 
 const router = express.Router();
 
@@ -272,7 +270,7 @@ router.get('/users', (req, res, next) => {
  *               $ref: '#/components/schemas/User'
  *      400:
  *         description: Bad Request
- *      404:
+ *      404: 
  *         description: Not Found
  *      500: 
  *         description: Internal Server Error
