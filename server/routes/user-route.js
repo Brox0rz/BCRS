@@ -210,7 +210,7 @@ router.delete("/:userId", async (req, res) => {
  * /api/users:
  *  get:
  *    summary: Find all users
- *    tags: [User]
+ *    tags: Users
  *    content: 
  *      application/json:
  *        schema: 
@@ -228,24 +228,21 @@ router.delete("/:userId", async (req, res) => {
  */
 
 // findAllUsers
-router.get('/users', (req, res, next) => {
+router.get('/', async (req, res) => {
   try {
-      
-      mongo(async db => {
-          const users = await db.collection('users').find(
-              {},
-              { projection: { userId: 1, firstName: 1, lastName: 1, email: 1, role: 1 } },
-          )
-          .sort({ userId: 1}) // sorts the results by userId ascending (1) or descending (-1)
-          .toArray() // convert the results to an array
-
-          console.log('users', users)
-
-          res.send(users)
-      }, next)
-  } catch (err) {
-      console.log('err', err)
-      next(err)
+    const users = await User.find({});
+    res.json(users);
+  } catch (error) {
+    console.log(error);
+    if (error.name === "MongoServerError") {
+      res.status(501).send({
+        'message': `MongoDB Exception: ${error}`
+      });
+    } else {
+      res.status(500).send({
+        'message': `Server Exception: ${error.message}`
+      });
+    }
   }
 });
 
@@ -277,43 +274,25 @@ router.get('/users', (req, res, next) => {
 */
 
 // findUserById
-router.get('/:userId', (req, res, next) => {
+router.get('/:id', async (req, res) => {
   try {
-      let { userId } = req.params // user Id
-      userId = parseInt(userId, 10)
-
-      if (isNaN(userId)) {
-          // if userId is not a number
-          const err = new Error('input must be a number')
-          err.status = 400
-          console.log('err', err)
-          next(err)
-          return
-      }
-
-      mongo(async db => {
-
-          // find user by userId
-          const user = await db.collection('users').findOne(
-              { userId }, 
-              { projection: { userId: 1, firstName: 1, lastName: 1, email: 1, role: 1 } },
-          )
-
-          if (!user) {
-              // if the user is not found
-              const err = new Error('Unable to find user with userId' + userId)
-              err.status = 404
-              console.log('err', err)
-              next(err)
-              return
-          }
-
-          res.send(employee)
-      }, next)
-  } catch (e) {
-      console.log(e);
-      next(err)
+    const user = await User.findOne({ _id: req.params.id });
+    if (user) {
+      res.json(user);
+    } else {
+      res.status(404).send({
+        'message': 'User not found'
+      });
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({
+      'message': `Server Exception: ${error.message}`
+    });
   }
 });
 
 module.exports = router;  // end module.exports = router
+
+
+
