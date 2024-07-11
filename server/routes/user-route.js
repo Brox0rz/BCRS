@@ -307,6 +307,37 @@ router.get('/:userId', (req, res, next) => {
   }
 });
 
+
+// findUserById
+router.get('/:userId', async (req, res) => {
+  try {
+    console.log("Request received for user ID:", req.params.userId);
+    
+    const userId = req.params.userId;
+    const objectId = new ObjectId(userId);
+    console.log("Converted user ID to ObjectId:", objectId);
+
+    const user = await db.collection("users").findOne({ _id: objectId });
+    console.log("User found:", user);
+
+    if (user) {
+      res.json(user);
+    } else {
+      console.log("User not found");
+      res.status(404).send({
+        'message': 'User not found'
+      });
+    }
+  } catch (error) {
+    console.log("Error occurred:", error);
+    res.status(500).send({
+      'message': `Server Exception: ${error.message}`
+    });
+  }
+});
+
+
+
 /**
  * @swagger
  * /api/users/{userId}:
