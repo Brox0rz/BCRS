@@ -227,24 +227,24 @@ router.delete("/:userId", async (req, res) => {
  */
 
 // findAllUsers
-router.get('/users', (req, res, next) => {
+router.get('/', (req, res, next) => {
   try {
-      
-      mongo(async db => {
-          const users = await db.collection('users').find(
-              {},
-              { projection: { userId: 1, firstName: 1, lastName: 1, email: 1, role: 1 } },
-          )
-          .sort({ userId: 1}) // sorts the results by userId ascending (1) or descending (-1)
-          .toArray() // convert the results to an array
+    // Changed the endpoint from '/users' to '/' to match the Swagger documentation
+    mongo(async db => {
+      const users = await db.collection('users').find(
+        {},
+        { projection: { userId: 1, firstName: 1, lastName: 1, email: 1, role: 1 } },
+      )
+      .sort({ userId: 1 }) // sorts the results by userId ascending (1) or descending (-1)
+      .toArray(); // convert the results to an array
 
-          console.log('users', users)
+      console.log('users', users);
 
-          res.send(users)
-      }, next)
+      res.send(users);
+    }, next);
   } catch (err) {
-      console.log('err', err)
-      next(err)
+    console.log('err', err);
+    next(err);
   }
 });
 
@@ -307,37 +307,6 @@ router.get('/:userId', (req, res, next) => {
   }
 });
 
-
-// findUserById
-router.get('/:userId', async (req, res) => {
-  try {
-    console.log("Request received for user ID:", req.params.userId);
-    
-    const userId = req.params.userId;
-    const objectId = new ObjectId(userId);
-    console.log("Converted user ID to ObjectId:", objectId);
-
-    const user = await db.collection("users").findOne({ _id: objectId });
-    console.log("User found:", user);
-
-    if (user) {
-      res.json(user);
-    } else {
-      console.log("User not found");
-      res.status(404).send({
-        'message': 'User not found'
-      });
-    }
-  } catch (error) {
-    console.log("Error occurred:", error);
-    res.status(500).send({
-      'message': `Server Exception: ${error.message}`
-    });
-  }
-});
-
-
-
 /**
  * @swagger
  * /api/users/{userId}:
@@ -386,6 +355,83 @@ router.put('/:userId', (req, res, next) => {
     mongo(async db => {
       const result = await db.collection('users').updateOne(
         { _id: userId },
+        { $set: req.body }
+      );
+
+      if (result.matchedCount === 0) {
+        const err = new Error('Unable to find user with userId ' + userId);
+        err.status = 404;
+        console.log('err', err);
+        next(err);
+        return;
+      }
+
+      res.status(204).send();
+    }, next);
+  } catch (err) {
+    console.log('err', err);
+    next(err);
+  }
+});
+
+/**
+ * @swagger
+ * /api/users/{userId}:
+ *   put:
+ *     tags: [User]
+ *     description: API for updating a user's data
+ *     summary: Update a user
+ *     parameters:
+ *       - name: userId
+ *         in: path
+ *         description: The User ID requested by the user.
+ *         required: true
+ *         schema:
+ *           type: string
+ *     requestBody:
+ *       description: Updating data request
+ *       content:
+ *         application/json:
+ *           schema:
+ *             required:
+ *               - role
+ *               - isDisabled
+ *             properties:
+ *               role:
+ *                 type: string
+ *               isDisabled:
+ *                 type: boolean
+ *     responses:
+ *       '204':
+ *         description: User updated successfully
+ *       '400':
+ *         description: Bad Request
+ *       '404':
+ *         description: User not found
+ *       '500':
+ *         description: Internal Server Error
+ *       '501':
+ *         description: Database Error
+ */
+
+// updateUser
+router.put('/:userId', (req, res, next) => {
+  try {
+    let { userId } = req.params;
+    userId = parseInt(userId, 10); // Parse the userId to an integer
+
+    // if the userId is not a number, return a 400 error code
+    if (isNaN(userId)) {
+      const err = new Error('Input must be a number');
+      err.status = 400;
+      console.log('err', err);
+      next(err);
+      return; // return to exit the function
+    }
+
+    mongo(async db => {
+      const result = await db.collection('users').updateOne(
+        { userId },
         { $set: req.body }
       );
 
