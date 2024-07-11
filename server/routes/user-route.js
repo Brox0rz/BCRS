@@ -214,7 +214,6 @@ router.delete("/:userId", async (req, res) => {
  *    content: 
  *      application/json:
  *        schema: 
- *          $ref: '#/components/schemas/User'
  *    responses: 
  *      200: 
  *         description: Successful
@@ -260,8 +259,7 @@ router.get('/', async (req, res) => {
 *        description: ID of user to retrieve
 *        schema: 
 *          type: string
-*     - $ref: '#/components/schemas/users
-*     responses: 
+*    responses: 
 *      200: 
 *         description: User successfully found
 *      400:
@@ -274,18 +272,27 @@ router.get('/', async (req, res) => {
 */
 
 // findUserById
-router.get('/:id', async (req, res) => {
+router.get('/:userId', async (req, res) => {
   try {
-    const user = await User.findOne({ _id: req.params.id });
+    console.log("Request received for user ID:", req.params.userId);
+
+    const userId = req.params.userId;
+    const objectId = new ObjectId(userId);
+    console.log("Converted user ID to ObjectId:", objectId);
+
+    const user = await db.collection("users").findOne({ _id: objectId });
+    console.log("User found:", user);
+
     if (user) {
       res.json(user);
     } else {
+      console.log("User not found");
       res.status(404).send({
         'message': 'User not found'
       });
     }
   } catch (error) {
-    console.log(error);
+    console.log("Error occurred:", error);
     res.status(500).send({
       'message': `Server Exception: ${error.message}`
     });
