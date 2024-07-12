@@ -14,6 +14,46 @@ const router = express.Router();
 
 /**
  * @swagger
+ * /api/selectedSecurityQuestions
+ *  get:
+ *    summary: Find all selected
+ *    tags: Users
+ *    content: 
+ *      application/json:
+ *        schema: 
+ *    responses: 
+ *      200: 
+ *         description: Successful
+ *      400: 
+ *         description: Bad Request
+ *      404: 
+ *         description: Not Found
+ *      500: 
+ *         description: Internal Server Error
+ *       
+ */
+
+// findSelectedSecurityQuestions
+router.get('/', async (req, res) => {
+  try {
+    const questions = await selectedSecurityQuestions.find({});
+    res.json(questions);
+  } catch (error) {
+    console.log(error);
+    if (error.name === "MongoServerError") {
+      res.status(501).send({
+        'message': `MongoDB Exception: ${error}`
+      });
+    } else {
+      res.status(500).send({
+        'message': `Server Exception: ${error.message}`
+      });
+    }
+  }
+});
+
+/**
+ * @swagger
  * /api/security/verify/users/{email}/security-questions:
  *   post:
  *     summary: Verify user's security questions
@@ -90,5 +130,45 @@ router.post("/verify/users/:email/security-questions", async (req, res) => {
     res.status(500).send({ message: `Internal Server Error: ${e.message}` });
   }
 });
+/**
+ * @swagger
+ * /api/security/find/users/{email}/security-questions:
+ *   post:
+ *     summary: Verify user's security questions
+ *     tags: [Security]
+ *     parameters:
+ *       - name: email
+ *         in: path
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The user's email
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               selectedSecurityQuestions:
+ *                 type: array
+ *                 items:
+ *                   type: object
+ *                   properties:
+ *                     questionText:
+ *                       type: string
+ *                     answerText:
+ *                       type: string
+ *     responses:
+ *       200:
+ *         description: Security questions verified successfully
+ *       400:
+ *         description: Bad Request
+ *       404:
+ *         description: Not Found
+ *       500:
+ *         description: Internal Server Error
+ */
+
 
 module.exports = router; // Export the router to be used in other parts of the application

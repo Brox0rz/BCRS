@@ -15,6 +15,7 @@ import { BaseLayoutComponent } from './layouts/base-layout/base-layout.component
 import { NavComponent } from './layouts/nav/nav.component';
 import { FooterComponent } from './layouts/footer/footer.component';
 import { NotFoundPageComponent } from './not-found-page/not-found-page.component';
+import { EmployeeDirectoryComponent } from './employee-directory/employee-directory.component';
 
 @NgModule({
   declarations: [
@@ -23,7 +24,8 @@ import { NotFoundPageComponent } from './not-found-page/not-found-page.component
     BaseLayoutComponent,
     NavComponent,
     FooterComponent,
-    NotFoundPageComponent
+    NotFoundPageComponent,
+    EmployeeDirectoryComponent
   ],
   imports: [
     BrowserModule,
