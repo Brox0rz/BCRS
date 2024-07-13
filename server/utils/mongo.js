@@ -1,10 +1,17 @@
+/**
+ * Title: mongo.js
+ * Author: Professor Richard Krasso and Brock Hemsouvanh
+ * Date: 07/10/2024
+ * Description: Utility for handling MongoDB operations
+ */
+
 "use strict";
 
 // Import MongoClient from the MongoDB library
 const { MongoClient } = require("mongodb");
 
 // MongoDB connection string
-const MONGO_URL = "mongodb+srv://bcrs_user:s3cret@bellevueuniversity.0wy1rgj.mongodb.net/?retryWrites=true&w=majority&appName=BellevueUniversity"
+const MONGO_URL = "mongodb+srv://bcrs_user:s3cret@bellevueuniversity.0wy1rgj.mongodb.net/?retryWrites=true&w=majority&appName=BellevueUniversity";
 
 /**
  * A utility function to connect to MongoDB, perform database operations, and handle errors.
@@ -37,7 +44,7 @@ const mongo = async (operations, next) => {
     const error = new Error("Error connecting to the database:", err);
     error.status = 500;
     console.error("Error connecting to the database:", err);
-    next(error);
+    if (next) next(error);
   }
 }
 

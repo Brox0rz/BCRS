@@ -1,9 +1,9 @@
 /**
  * Title: user-route.js
- * Author: Professor Richard Krasso 
+ * Author: Professor Richard Krasso and Brock Hemsouvanh
  * Date: 7/05/24
- * Updated: 7/08/24 by Brock Hemsouvanh
- * Description: Route for handling user API requests
+ * Updated: 07/12/2024 by Brock Hemsouvanh
+ * Description: Routes for handling user-related API requests
  */
 
 "use strict";
@@ -11,8 +11,8 @@
 const express = require("express");
 const { mongo } = require("../utils/mongo");
 const createError = require("http-errors");
-const Ajv = require('ajv');
 const { ObjectId } = require('mongodb');
+const Ajv = require('ajv');
 const ajv = new Ajv(); // create a new instance of the Ajv object from the npm package
 
 const router = express.Router();
@@ -178,7 +178,6 @@ router.delete("/:userId", async (req, res) => {
   console.log("Deleting user...");
   try {
     // Validate the userId parameter
-    
     const userId = req.params.userId;
     if (!ObjectId.isValid(userId)) {
       return res.status(400).send({ message: "Bad Request: Invalid userId" });
@@ -232,22 +231,21 @@ router.delete("/:userId", async (req, res) => {
 // findAllUsers
 router.get('/users', (req, res, next) => {
   try {
-      
-      mongo(async db => {
-          const users = await db.collection('users').find(
-              {},
-              { projection: { userId: 1, firstName: 1, lastName: 1, email: 1, role: 1 } },
-          )
-          .sort({ userId: 1}) // sorts the results by userId ascending (1) or descending (-1)
-          .toArray() // convert the results to an array
+    mongo(async db => {
+      const users = await db.collection('users').find(
+        {},
+        { projection: { userId: 1, firstName: 1, lastName: 1, email: 1, role: 1 } },
+      )
+      .sort({ userId: 1}) // sorts the results by userId ascending (1) or descending (-1)
+      .toArray(); // convert the results to an array
 
-          console.log('users', users)
+      console.log('users', users);
 
-          res.send(users)
-      }, next)
+      res.send(users);
+    }, next);
   } catch (err) {
-      console.log('err', err)
-      next(err)
+    console.log('err', err);
+    next(err);
   }
 });
 
@@ -273,7 +271,7 @@ router.get('/users', (req, res, next) => {
  *               $ref: '#/components/schemas/User'
  *      400:
  *         description: Bad Request
- *      404:
+ *      404: 
  *         description: Not Found
  *      500: 
  *         description: Internal Server Error
@@ -282,31 +280,30 @@ router.get('/users', (req, res, next) => {
 // findUserById
 router.get('/:userId', (req, res, next) => {
   try {
-      let { userId } = req.params // user Id
-      userId = new ObjectId(userId);
+    let { userId } = req.params; // user Id
+    userId = new ObjectId(userId);
 
-      mongo(async db => {
+    mongo(async db => {
+      // find user by userId
+      const user = await db.collection('users').findOne(
+        { _id: userId }, 
+        { projection: { userId: 1, firstName: 1, lastName: 1, email: 1, role: 1 } },
+      );
 
-          // find user by userId
-          const user = await db.collection('users').findOne(
-              { _id: userId }, 
-              { projection: { userId: 1, firstName: 1, lastName: 1, email: 1, role: 1 } },
-          )
+      if (!user) {
+        // if the user is not found
+        const err = new Error('Unable to find user with userId ' + userId);
+        err.status = 404;
+        console.log('err', err);
+        next(err);
+        return;
+      }
 
-          if (!user) {
-              // if the user is not found
-              const err = new Error('Unable to find user with userId ' + userId)
-              err.status = 404
-              console.log('err', err)
-              next(err)
-              return
-          }
-
-          res.send(user)
-      }, next)
+      res.send(user);
+    }, next);
   } catch (e) {
-      console.log(e);
-      next(e)
+    console.log(e);
+    next(e);
   }
 });
 
@@ -349,7 +346,6 @@ router.get('/:userId', (req, res, next) => {
  *       501:
  *         description: Database Error
  */
-
 router.put('/:userId', (req, res, next) => {
   try {
     let { userId } = req.params;

@@ -1,40 +1,93 @@
-/*
+/**
  * Title: nav.component.css
- * Author: Phuong Tran, Makenize.., Brock..
- * Date: 07/02/2024
+ * Author: Brock Hemsouvanh, Phuong Tran, Mackenzie Lubbon-Ortiz
+ * Date: 07/08/2024
+ * Description: CSS styles for the navigation component in the BCRS application
  * Sources: BCRS Starter Project: https://github.com/buwebdev/web-450/tree/master/starter-projects/bcrs
  */
 
- .navbar-nav {
-  margin-left: auto;
+ .navbar {
+  background-color: #0F1D4A; /* Dark Blue */
+  color: #C0C0C0; /* Silver */
+  padding: 15px 20px 10px 20px;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 1000;
+  font-size: 24px;
 }
 
 .navbar-brand {
-  color: #0f1d4a !important;
+  color: white;
+  text-decoration: none;
   font-size: 28px;
   font-weight: 600;
 }
 
-.navbar {
-  background-color: white;
-  color: #0f1d4a !important;
-  padding: 15px 20px 10px 20px;
-  font-size: 24px;
+.navbar-nav {
+  list-style: none;
+  padding-left: 0;
+  margin: 0;
+  display: flex;
+  justify-content: flex-end;
+  margin-left: auto;
 }
 
-.nav-link {
-  color: #111c40;
+.navbar-nav .nav-item {
+  margin-left: 20px;
+}
+
+.navbar-nav .nav-link {
+  color: #C0C0C0; /* Silver */
+  text-decoration: none;
+  padding: 8px 16px;
   font-weight: 600;
 }
 
-.nav-link:hover {
-  color: #946b2d;
+.navbar-nav .nav-link:hover {
+  color: #946B2D; /* Bronze */
 }
 
 .navbar-toggler {
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
   color: #111c40;
 }
 
-.navbar-toggler .navbar-toggler-icon {
-  cursor: pointer;
+.navbar-toggler-icon {
+  width: 24px;
+  height: 24px;
+  background-image: url('data:image/svg+xml;charset=utf8,%3Csvg viewBox="0 0 30 30" xmlns="http://www.w3.org/2000/svg"%3E%3Cpath stroke="rgba%28255, 255, 255, 0.5%29" stroke-width="2" stroke-linecap="round" stroke-miterlimit="10" d="M4 7h22M4 15h22M4 23h22"/%3E%3C/svg%3E');
+}
+
+.collapse {
+  display: none;
+}
+
+.collapse.show {
+  display: block;
+}
+
+.dropdown-menu {
+  background-color: #0F1D4A; /* Dark Blue */
+  color: #C0C0C0; /* Silver */
+  padding: 10px;
+  border-radius: 5px;
+  position: absolute;
+  top: 100%;
+  right: 0;
+}
+
+.dropdown-item {
+  color: #C0C0C0; /* Silver */
+  text-decoration: none;
+  display: block;
+  padding: 8px 16px;
+}
+
+.dropdown-item:hover,
+.dropdown-item:focus {
+  color: #946B2D; /* Bronze */
+  background-color: transparent;
 }

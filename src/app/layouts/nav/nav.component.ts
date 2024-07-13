@@ -26,7 +26,8 @@ export class NavComponent {
 
   // Constructor with cookieService and router dependencies
   constructor(private cookieService: CookieService, private router: Router) {
-    this.isSignedIn = this.cookieService.get('session_user') ? true : false;  // Check if the user is signed in
+    // Check if the user is signed in
+    this.isSignedIn = this.cookieService.get('session_user') ? true : false;
     this.appUser = {} as AppUser;
 
     // If the user is signed in, set the appUser object to the session name
@@ -41,7 +42,9 @@ export class NavComponent {
   // Signout function to clear the session cookie
   signout() {
     console.log('Clearing cookies');
-    this.cookieService.deleteAll();  // Delete all cookies
-    window.location.href = '/';  // Redirect to the home page
+    // Delete all cookies
+    this.cookieService.deleteAll();
+    // Redirect to the home page
+    window.location.href = '/';
   }
 }
