@@ -2,8 +2,8 @@
  * Title: user-route.js
  * Author: Professor Richard Krasso and Brock Hemsouvanh
  * Date: 7/05/24
- * Updated: 7/08/24 by Brock Hemsouvanh
- * Description: Route for handling user API requests
+ * Updated: 07/12/2024 by Brock Hemsouvanh
+ * Description: Routes for handling user-related API requests
  */
 
 "use strict";
@@ -12,6 +12,8 @@ const express = require("express");
 const { mongo } = require("../utils/mongo");
 const createError = require("http-errors");
 const { ObjectId } = require('mongodb');
+const Ajv = require('ajv');
+const ajv = new Ajv(); // create a new instance of the Ajv object from the npm package
 
 const router = express.Router();
 
@@ -173,7 +175,7 @@ router.post("/", async (req, res) => {
  *         description: Internal Server Error
  */
 router.delete("/:userId", async (req, res) => {
-  console.log("Deleting user...beep, boop!");
+  console.log("Deleting user...");
   try {
     // Validate the userId parameter
     const userId = req.params.userId;
@@ -229,22 +231,21 @@ router.delete("/:userId", async (req, res) => {
 // findAllUsers
 router.get('/users', (req, res, next) => {
   try {
-      
-      mongo(async db => {
-          const users = await db.collection('users').find(
-              {},
-              { projection: { userId: 1, firstName: 1, lastName: 1, email: 1, role: 1 } },
-          )
-          .sort({ userId: 1}) // sorts the results by userId ascending (1) or descending (-1)
-          .toArray() // convert the results to an array
+    mongo(async db => {
+      const users = await db.collection('users').find(
+        {},
+        { projection: { userId: 1, firstName: 1, lastName: 1, email: 1, role: 1 } },
+      )
+      .sort({ userId: 1}) // sorts the results by userId ascending (1) or descending (-1)
+      .toArray(); // convert the results to an array
 
-          console.log('users', users)
+      console.log('users', users);
 
-          res.send(users)
-      }, next)
+      res.send(users);
+    }, next);
   } catch (err) {
-      console.log('err', err)
-      next(err)
+    console.log('err', err);
+    next(err);
   }
 });
 
@@ -279,64 +280,32 @@ router.get('/users', (req, res, next) => {
 // findUserById
 router.get('/:userId', (req, res, next) => {
   try {
-      let { userId } = req.params // user Id
-      userId = new ObjectId(userId);
+    let { userId } = req.params; // user Id
+    userId = new ObjectId(userId);
 
-      mongo(async db => {
+    mongo(async db => {
+      // find user by userId
+      const user = await db.collection('users').findOne(
+        { _id: userId }, 
+        { projection: { userId: 1, firstName: 1, lastName: 1, email: 1, role: 1 } },
+      );
 
-          // find user by userId
-          const user = await db.collection('users').findOne(
-              { _id: userId }, 
-              { projection: { userId: 1, firstName: 1, lastName: 1, email: 1, role: 1 } },
-          )
+      if (!user) {
+        // if the user is not found
+        const err = new Error('Unable to find user with userId ' + userId);
+        err.status = 404;
+        console.log('err', err);
+        next(err);
+        return;
+      }
 
-          if (!user) {
-              // if the user is not found
-              const err = new Error('Unable to find user with userId ' + userId)
-              err.status = 404
-              console.log('err', err)
-              next(err)
-              return
-          }
-
-          res.send(user)
-      }, next)
+      res.send(user);
+    }, next);
   } catch (e) {
-      console.log(e);
-      next(e)
+    console.log(e);
+    next(e);
   }
 });
-
-
-// findUserById
-router.get('/:userId', async (req, res) => {
-  try {
-    console.log("Request received for user ID:", req.params.userId);
-    
-    const userId = req.params.userId;
-    const objectId = new ObjectId(userId);
-    console.log("Converted user ID to ObjectId:", objectId);
-
-    const user = await db.collection("users").findOne({ _id: objectId });
-    console.log("User found:", user);
-
-    if (user) {
-      res.json(user);
-    } else {
-      console.log("User not found");
-      res.status(404).send({
-        'message': 'User not found'
-      });
-    }
-  } catch (error) {
-    console.log("Error occurred:", error);
-    res.status(500).send({
-      'message': `Server Exception: ${error.message}`
-    });
-  }
-});
-
-
 
 /**
  * @swagger
@@ -377,7 +346,6 @@ router.get('/:userId', async (req, res) => {
  *       501:
  *         description: Database Error
  */
-
 router.put('/:userId', (req, res, next) => {
   try {
     let { userId } = req.params;

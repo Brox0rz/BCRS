@@ -8,7 +8,8 @@
 // imports statements
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { ReactiveFormsModule } from '@angular/forms';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HomeComponent } from './home/home.component';
@@ -19,7 +20,8 @@ import { NotFoundPageComponent } from './not-found-page/not-found-page.component
 import { AdminComponent } from './admin/admin.component';
 import { SigninComponent } from './signin/signin.component';
 import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
-import { FormsModule } from '@angular/forms';
+import { CookieService } from 'ngx-cookie-service';
+import { EmployeeDirectoryComponent } from './employee-directory/employee-directory.component';
 
 @NgModule({
   declarations: [
@@ -31,15 +33,17 @@ import { FormsModule } from '@angular/forms';
     NotFoundPageComponent,
     AdminComponent,
     SigninComponent,
-    ForgotPasswordComponent
+    ForgotPasswordComponent,
+    EmployeeDirectoryComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     ReactiveFormsModule,
-    FormsModule
+    FormsModule,
+    HttpClientModule,
   ],
-  providers: [],
+  providers: [CookieService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

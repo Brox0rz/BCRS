@@ -1,4 +1,108 @@
-/* styles.css */
+/* Global Styles */
+
+/* Import Google Fonts */
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap");
+
+/* Reset margin and padding for body and html, and set font family */
+body, html {
+  margin: 0;
+  padding: 0;
+  font-family: "Montserrat", sans-serif !important;
+}
+
+/* Add margin to main content to prevent overlap with navbar */
+main {
+  margin-top: 150px; /* Adjust this value based on the height of your navbar */
+}
+
+/* Navbar Styles */
+.navbar {
+  background-color: #0F1D4A; /* Dark Blue */
+  color: #C0C0C0; /* Silver */
+  padding: 15px 20px 10px 20px;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 1000;
+  font-size: 24px;
+}
+
+.navbar-brand {
+  color: white;
+  text-decoration: none;
+  font-size: 28px;
+  font-weight: 600;
+}
+
+.navbar-nav {
+  list-style: none;
+  padding-left: 0;
+  margin: 0;
+  display: flex;
+  justify-content: flex-end;
+  margin-left: auto;
+}
+
+.navbar-nav .nav-item {
+  margin-left: 20px;
+}
+
+.navbar-nav .nav-link {
+  color: #C0C0C0; /* Silver */
+  text-decoration: none;
+  padding: 8px 16px;
+  font-weight: 600;
+}
+
+.navbar-nav .nav-link:hover {
+  color: #946B2D; /* Bronze */
+}
+
+.navbar-toggler {
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+  color: #111c40;
+}
+
+.navbar-toggler-icon {
+  width: 24px;
+  height: 24px;
+  background-image: url('data:image/svg+xml;charset=utf8,%3Csvg viewBox="0 0 30 30" xmlns="http://www.w3.org/2000/svg"%3E%3Cpath stroke="rgba%28255, 255, 255, 0.5%29" stroke-width="2" stroke-linecap="round" stroke-miterlimit="10" d="M4 7h22M4 15h22M4 23h22"/%3E%3C/svg%3E');
+}
+
+.collapse {
+  display: none;
+}
+
+.collapse.show {
+  display: block;
+}
+
+.dropdown-menu {
+  background-color: #0F1D4A; /* Dark Blue */
+  color: #C0C0C0; /* Silver */
+  padding: 10px;
+  border-radius: 5px;
+  position: absolute;
+  top: 100%;
+  right: 0;
+}
+
+.dropdown-item {
+  color: #C0C0C0; /* Silver */
+  text-decoration: none;
+  display: block;
+  padding: 8px 16px;
+}
+
+.dropdown-item:hover,
+.dropdown-item:focus {
+  color: #946B2D; /* Bronze */
+  background-color: transparent;
+}
+
+/* General Container Styles */
 
 /* Container for centered content */
 .container-centered {
@@ -21,6 +125,8 @@
   height: auto;
   border: 2px solid #223164; /* Border color */
 }
+
+/* Overlay Text Styles */
 
 /* Overlay text for images */
 .overlay-text {
@@ -46,7 +152,9 @@
   color: #5D5D5D; /* Grey paragraph text */
 }
 
-/* Link styling */
+/* Link Styles */
+
+/* Link button styling */
 .link-button {
   display: inline-block;
   padding: 10px 20px;
@@ -56,12 +164,14 @@
   border-radius: 5px;
 }
 
-/* Link hover effect */
+/* Link button hover effect */
 .link-button:hover {
   background-color: #946B2D; /* Hover color change to bronze */
 }
 
-/* Photo attribution styling */
+/* Photo Attribution Styles */
+
+/* Photo attribution container */
 .photo-attribution {
   margin-top: 20px;
   font-size: 0.9em;
@@ -75,5 +185,5 @@
 
 /* Hover effect for links within photo attribution */
 .photo-attribution a:hover {
-  color: #ffffff; /* White text on hover */
+  color: #C0C0C0; /* Silver text on hover */
 }

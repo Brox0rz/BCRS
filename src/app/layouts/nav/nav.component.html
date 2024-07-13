@@ -1,13 +1,17 @@
 <!--
   Title: nav.component.html
-  Author: Brock Hemsouvanh
+  Authors: Brock Hemsouvanh, Phuong Tran
   Date: 07/07/2024
   Description: Navigation component template for BCRS application
 -->
 
-<nav class="navbar">
+<nav class="navbar navbar-expand-lg no-print">
   <!-- Brand link to home page -->
-  <a routerLink="/" class="navbar-brand">BCRS</a>
+  <a class="navbar-brand" href="/">
+    <!-- Brand text for the navigation bar. -->
+    <img src="assets/bcrs-logo.jpg" alt="BCRS Logo" width="80" height="70" />
+  </a>
+  <span class="navbar-brand">BCRS</span>
 
   <!-- Toggler button for collapsed navbar on small screens -->
   <button
@@ -24,13 +28,13 @@
 
   <!-- Navbar links -->
   <div class="collapse navbar-collapse" id="navbarResponsive">
-    <ul class="navbar-nav">
+    <ul class="navbar-nav navbar-nav">
       <!-- Home link -->
-      <li class="nav-item">
-        <a routerLink="/home" class="nav-link">Home</a>
+      <li class="nav-item" routerLinkActive="active">
+        <a class="nav-link" routerLink="/home">Home</a>
       </li>
       <!-- Services link -->
-      <li class="nav-item">
+      <li class="nav-item" routerLinkActive="active">
         <a routerLink="/services" class="nav-link">Services</a>
       </li>
       <!-- FAQ link -->
@@ -38,19 +42,22 @@
         <a routerLink="/faq" class="nav-link">FAQ</a>
       </li>
       <!-- Employee Directory link -->
-      <li class="nav-item">
+      <li class="nav-item" routerLinkActive="active">
         <a routerLink="/employee-directory" class="nav-link">Employee Directory</a>
       </li>
-
+      <!-- Register Link for new user -->
+      <li class="nav-item" routerLinkActive="active">
+        <a class="nav-link" routerLink="/register">Register</a>
+      </li>
       <!-- Sign In link (visible when not signed in) -->
-      <li *ngIf="!isSignedIn" class="nav-item">
+      <li  class="nav-item">
         <a class="nav-link" routerLink="/signin">Sign In</a>
       </li>
 
       <!-- Dropdown menu (visible when signed in) -->
       <li *ngIf="isSignedIn" class="nav-item dropdown">
         <a href="#"
-          class="nav-link"
+          class="nav-link dropdown-toggle"
           id="navbarDropdown"
           role="button"
           data-bs-toggle="dropdown"
@@ -58,13 +65,23 @@
           <span class="material-icons">person</span>
         </a>
 
-        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-          <li class="dropdown-item">
+        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+          <li class="dropdown-item profileName">
             Signed in as {{ appUser.fullName }}
           </li>
+          <li class="dropdown-item role">User Role</li>
           <hr />
-          <li>
-            <a (click)="signout()" class="dropdown-item link">Sign Out</a>
+          <li class="dropdown-item">
+            <a routerLink="/" class="dropdown-item menuItem">My Profile</a>
+          </li>
+          <li class="dropdown-item">
+            <a routerLink="/" class="dropdown-item menuItem">User Configuration</a>
+          </li>
+          <li class="dropdown-item">
+            <a routerLink="/" class="dropdown-item menuItem">Purchases By Service</a>
+          </li>
+          <li class="dropdown-item">
+            <a class="dropdown-item menuItem">Log Out</a>
           </li>
         </ul>
       </li>
