@@ -1,0 +1,31 @@
+# Node modules directory
+node_modules/
+
+# Angular cache
+.angular/cache/
+
+# Output directory
+dist/
+build/
+
+# Environment files
+.env
+
+# Log files
+*.log
+
+# IDE specific files
+.vscode/
+.idea/
+
+# Temporary files
+*.tmp
+*.temp
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Miscellaneous
+*.bak
+*.swp

@@ -1,0 +1,40 @@
+/*
+ * Title: nav.component.css
+ * Author: Phuong Tran, Makenize.., Brock..
+ * Date: 07/02/2024
+ * Sources: BCRS Starter Project: https://github.com/buwebdev/web-450/tree/master/starter-projects/bcrs
+ */
+
+ .navbar-nav {
+  margin-left: auto;
+}
+
+.navbar-brand {
+  color: #0f1d4a !important;
+  font-size: 28px;
+  font-weight: 600;
+}
+
+.navbar {
+  background-color: white;
+  color: #0f1d4a !important;
+  padding: 15px 20px 10px 20px;
+  font-size: 24px;
+}
+
+.nav-link {
+  color: #111c40;
+  font-weight: 600;
+}
+
+.nav-link:hover {
+  color: #946b2d;
+}
+
+.navbar-toggler {
+  color: #111c40;
+}
+
+.navbar-toggler .navbar-toggler-icon {
+  cursor: pointer;
+}
