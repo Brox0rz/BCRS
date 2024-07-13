@@ -2,6 +2,7 @@
  * Title: security-route.js
  * Author: Professor Richard Krasso and Brock Hemsouvanh
  * Date: 7/10/24
+ * Updated: 07/12/2024
  * Description: Routes for handling security-related API requests
  */
 
@@ -84,6 +85,70 @@ router.post("/verify/users/:email/security-questions", async (req, res) => {
 
       // If verification is successful, return a 200 response
       res.status(200).send({ message: "Security questions verified successfully" });
+    });
+  } catch (e) {
+    // Handle any other errors with a 500 response
+    res.status(500).send({ message: `Internal Server Error: ${e.message}` });
+  }
+});
+
+/**
+ * @swagger
+ * /api/security/users/{email}/reset-password:
+ *   post:
+ *     summary: Reset user's password
+ *     tags: [Security]
+ *     parameters:
+ *       - name: email
+ *         in: path
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The user's email
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               newPassword:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Password reset successfully
+ *       400:
+ *         description: Bad Request
+ *       404:
+ *         description: Not Found
+ *       500:
+ *         description: Internal Server Error
+ */
+router.post("/users/:email/reset-password", async (req, res) => {
+  try {
+    const { email } = req.params; // Extract email from the request parameters
+    const { newPassword } = req.body; // Extract new password from the request body
+
+    // Validate the input
+    if (!email || !newPassword) {
+      return res.status(400).send({ message: "Bad Request: Invalid input" });
+    }
+
+    // Connect to the database
+    mongo(async (db) => {
+      // Find the user by email
+      const user = await db.collection("users").findOne({ email });
+
+      // If the user is not found, return a 404 error
+      if (!user) {
+        return res.status(404).send({ message: "Not Found: User not found" });
+      }
+
+      // Update the user's password
+      await db.collection("users").updateOne({ email }, { $set: { password: newPassword } });
+
+      // Return a 200 response indicating success
+      res.status(200).send({ message: "Password reset successfully" });
     });
   } catch (e) {
     // Handle any other errors with a 500 response

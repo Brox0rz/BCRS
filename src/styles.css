@@ -1,1 +1,79 @@
-/* You can add global styles to this file, and also import other style files */
+/* styles.css */
+
+/* Container for centered content */
+.container-centered {
+  text-align: center;
+  padding: 50px;
+  background-color: #0F1D4A; /* Dark blue background */
+  color: #C0C0C0; /* Silver text */
+}
+
+/* Container for images with an overlay */
+.image-container {
+  position: relative;
+  display: inline-block;
+  max-width: 50%;
+}
+
+/* General image styling with a border */
+.image-bordered {
+  width: 100%;
+  height: auto;
+  border: 2px solid #223164; /* Border color */
+}
+
+/* Overlay text for images */
+.overlay-text {
+  position: absolute;
+  top: 18%;
+  left: 3%;
+  color: #C0C0C0; /* Silver text */
+  padding: 10px;
+  border-radius: 5px;
+}
+
+/* Heading inside overlay text */
+.overlay-text h1 {
+  font-size: 3em;
+  margin-bottom: 10px;
+  color: #946B2D; /* Bronze heading */
+}
+
+/* Paragraph inside overlay text */
+.overlay-text p {
+  font-size: 1.2em;
+  margin-bottom: 10px;
+  color: #5D5D5D; /* Grey paragraph text */
+}
+
+/* Link styling */
+.link-button {
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: #223164; /* Blue link background */
+  color: #C0C0C0; /* Silver text */
+  text-decoration: none;
+  border-radius: 5px;
+}
+
+/* Link hover effect */
+.link-button:hover {
+  background-color: #946B2D; /* Hover color change to bronze */
+}
+
+/* Photo attribution styling */
+.photo-attribution {
+  margin-top: 20px;
+  font-size: 0.9em;
+  color: #C0C0C0; /* Silver text */
+}
+
+/* Links within photo attribution */
+.photo-attribution a {
+  color: #C0C0C0; /* Silver text for links */
+}
+
+/* Hover effect for links within photo attribution */
+.photo-attribution a:hover {
+  color: #ffffff; /* White text on hover */
+}

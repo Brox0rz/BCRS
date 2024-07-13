@@ -1,3 +1,11 @@
+<!--
+  Title: signin.component.html
+  Author: Professor Krasso and Brock Hemsouvanh
+  Date: 8/5/23
+  Updated: 07/12/2024 by Brock Hemsouvanh
+  Description: HTML template for the Sign In Component
+-->
+
 <div class="signin-container">
   <h2>Sign In</h2>
   <form [formGroup]="signinForm" (ngSubmit)="onSubmit()">
@@ -17,6 +25,11 @@
         <small class="error" *ngIf="signinForm.get('password')?.errors?.['required']">Password is required.</small>
         <small class="error" *ngIf="signinForm.get('password')?.errors?.['minlength']">Password must be at least 6 characters long.</small>
       </div>
+    </div>
+
+    <!-- Link to Forgot Password page -->
+    <div class="form-group">
+      <a routerLink="/forgot-password">Forgot Password?</a>
     </div>
 
     <button type="submit" class="btn btn-primary" [disabled]="signinForm.invalid">Sign In</button>

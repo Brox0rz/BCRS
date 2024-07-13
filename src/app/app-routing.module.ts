@@ -13,6 +13,7 @@ import { HomeComponent } from './home/home.component';
 import { AdminComponent } from './admin/admin.component';
 import { NotFoundPageComponent } from './not-found-page/not-found-page.component';
 import { SigninComponent } from './signin/signin.component';
+import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
 
 // routes array with a path, component, and title for each route in the application 
 // (e.g. home, about, contact, etc.)
@@ -40,7 +41,12 @@ const routes: Routes = [
         path: 'admin',
         component: AdminComponent,
         title: 'BCRS: Admin' // title for the admin page
-      }
+      },
+      {
+        path: 'forgot-password', 
+        component: ForgotPasswordComponent,
+        title: 'BCRS: Forgot Password'
+      },
     ]
   },
   {

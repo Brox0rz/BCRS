@@ -2,7 +2,7 @@
  * Title: app.module.ts
  * Author: Professor Krasso and Brock Hemsouvanh
  * Date: 8/5/23
- * Updated: 07/08/2024 by Brock Hemsouvanh
+ * Updated: 07/12/2024 by Brock Hemsouvanh
  */
 
 // imports statements
@@ -18,6 +18,8 @@ import { FooterComponent } from './layouts/footer/footer.component';
 import { NotFoundPageComponent } from './not-found-page/not-found-page.component';
 import { AdminComponent } from './admin/admin.component';
 import { SigninComponent } from './signin/signin.component';
+import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -28,12 +30,14 @@ import { SigninComponent } from './signin/signin.component';
     FooterComponent,
     NotFoundPageComponent,
     AdminComponent,
-    SigninComponent
+    SigninComponent,
+    ForgotPasswordComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    FormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]
