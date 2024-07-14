@@ -476,4 +476,63 @@ router.post('/signin', (req, res, next) => {
   }
 });
 
-module.exports = router; // Export the router to be used in other parts of the application
+/**
+ * verify user by email
+ * @openapi
+ * /api/security/verify/users/{email}
+ *  post:
+ *    tags:
+ *      -Security
+ *    description: API for verifying a user exists
+ *    summary: Verify a user exists
+ *    parameters:
+ *      - name: email
+ *        in: path
+ *        required: true
+ *        description: Enter the email address for the user
+ *        schema:
+ *          type: string
+ *    response:
+ *      200:
+ *        description: Success
+ *      400:
+ *        description: Bad Request
+ *      404: 
+ *        description: Not Found
+ *      500: 
+ *        description: Internal Server Error
+ */
+
+router.post('/security/verify/users/:email', ( (req, res, next) => {
+  try {
+    //capture the email parameter
+    const email = req.params.email;
+    console.log('User email', email) // log out the email to the console 
+    
+    // call the mongo module and pass in the operations function
+    mongo(async db => {
+      const user = await db.collection('users').findOne({ email: email }) // find the user document by email
+      
+    // if the user is null return a 404 error to the client 
+    if (!user) {
+        const err = new Error('Not Found') // create a new Error object
+        err.status = 404 // set the error status to 404
+        console.log('User not found', err) // log out the error to the console
+        next(err) // return the error to the client 
+        return // return to the exit the function
+    }
+
+    console.log('Select User', user) // log out the user object to the console
+
+    res.send(user) // return the user object to the client
+    }, next)
+  
+  } catch (err) {
+    console.log(`API Error: ${err.message}`) // log out the error to the console
+    next(err)
+  }
+ })
+)
+
+  // Export the router
+module.exports = router;

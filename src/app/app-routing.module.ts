@@ -16,6 +16,7 @@ import { SigninComponent } from './signin/signin.component';
 import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
 import { RegisterComponent } from './security/register/register.component';
 import { EmployeeDirectoryComponent } from './employee-directory/employee-directory.component'; // Import the component
+import { FaqComponent } from './faq/faq.component';
 
 // routes array with a path, component, and title for each route in the application
 const routes: Routes = [
@@ -59,6 +60,11 @@ const routes: Routes = [
         component: EmployeeDirectoryComponent,
         title: 'BCRS: Employee Directory'
       },
+      {
+        path: 'faq',
+        component: FaqComponent,
+        title: 'BCRS: Faq'
+      }
     ]
   },
   {
