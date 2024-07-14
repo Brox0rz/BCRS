@@ -1,5 +1,5 @@
 /**
- * Title: user-route.js
+ * Title: user-routes.js
  * Author: Professor Richard Krasso and Brock Hemsouvanh
  * Date: 7/05/24
  * Updated: 07/12/2024 by Brock Hemsouvanh

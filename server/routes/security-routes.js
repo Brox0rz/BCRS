@@ -2,7 +2,7 @@
  * Title: security-routes.js
  * Author: Professor Richard Krasso, Brock Hemsouvanh, Mackenzie Lubben-Ortiz, and Phuong Tran
  * Date: 7/10/24
- * Updated: 07/13/2024 by Brock Hemsouvanh, Phuong Tran
+ * Updated: 07/14/2024 by Brock Hemsouvanh, Phuong Tran, Mackenzie Lubben-Ortiz
  * Description: Routes for handling security-related API requests
  */
 
@@ -60,6 +60,11 @@ const signInSchema = {
 };
 
 // Routes
+
+router.get('/test', (req, res) => {
+  res.json({ message: 'Test route is working' });
+});
+
 
 /**
  * @swagger
@@ -206,7 +211,7 @@ router.post("/users/:email/reset-password", async (req, res) => {
 
 /**
  * @swagger
- * /api/users/{email}/security-questions:
+ * /api/security/users/{email}/security-questions:
  *   get:
  *     summary: Find a user's selected security questions
  *     tags: [Security]

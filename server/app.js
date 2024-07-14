@@ -2,7 +2,7 @@
  * Title: app.js
  * Author: Professor Krasso and Brock Hemsouvanh
  * Date: 07/03/2024
- * Updated: 07/10/2024 by Brock Hemsouvanh
+ * Updated: 07/14/2024 by Brock Hemsouvanh
  */
 'use strict'
 
@@ -10,8 +10,8 @@
 const express = require('express');
 const createError = require('http-errors');
 const path = require('path');
-const userRoute = require("./routes/user-route");
-const securityRoute = require("./routes/security-route");
+const userRoutes = require("./routes/user-routes");
+const securityRoutes = require("./routes/security-routes");
 const swaggerJsdoc = require('swagger-jsdoc');
 const swaggerUi = require('swagger-ui-express');
 
@@ -47,13 +47,17 @@ const swaggerSpec = swaggerJsdoc(options);
 // Configure the app
 app.use(express.json()); // Middleware to parse JSON bodies
 app.use(express.urlencoded({ extended: true })); // Middleware to parse URL-encoded bodies
-app.use(express.static(path.join(__dirname, '../dist/bcrs'))); // Serve static files from the 'dist/bcrs' directory
-app.use('/', express.static(path.join(__dirname, '../dist/bcrs'))); // Serve the Angular app
-app.use("/api/users", userRoute); // Route for user-related API endpoints
-app.use("/api/security", securityRoute); // Route for security-related API endpoints
+
+// API routes
+app.use("/api/users", userRoutes); // Route for user-related API endpoints
+app.use("/api/security", securityRoutes); // Route for security-related API endpoints
 
 // Swagger setup
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec)); // Serve the Swagger API docs
+
+// Serve static files from the 'dist/bcrs' directory
+app.use(express.static(path.join(__dirname, '../dist/bcrs')));
+app.use('/', express.static(path.join(__dirname, '../dist/bcrs')));
 
 // Catch all other routes and return the Angular app index file
 app.get('*', (req, res) => {

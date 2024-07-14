@@ -19,11 +19,12 @@ const MONGO_URL = "mongodb+srv://bcrs_user:s3cret@bellevueuniversity.0wy1rgj.mon
  * @param {function} next - The next middleware function in the Express.js request-response cycle.
  */
 const mongo = async (operations, next) => {
+  let client;
   try {
     console.log("Connecting to the database...");
 
     // Connect to the MongoDB database
-    const client = await MongoClient.connect(MONGO_URL, {
+    client = await MongoClient.connect(MONGO_URL, {
       useNewUrlParser: true, // Use the new URL string parser
       useUnifiedTopology: true // Use the new Server Discover and Monitoring engine
     });
@@ -36,15 +37,18 @@ const mongo = async (operations, next) => {
     await operations(db);
     console.log("Operation was successful!");
 
-    // Close the database connection
-    client.close();
-    console.log("Disconnected from the database.");
   } catch (err) {
     // Handle any errors that occur during the database operations
-    const error = new Error("Error connecting to the database:", err);
+    const error = new Error("Error connecting to the database: " + err.message);
     error.status = 500;
     console.error("Error connecting to the database:", err);
     if (next) next(error);
+  } finally {
+    // Close the database connection
+    if (client) {
+      await client.close();
+      console.log("Disconnected from the database.");
+    }
   }
 }
 
