@@ -22,6 +22,7 @@ import { SigninComponent } from './signin/signin.component';
 import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
 import { CookieService } from 'ngx-cookie-service';
 import { EmployeeDirectoryComponent } from './employee-directory/employee-directory.component';
+import { FaqComponent } from './faq/faq.component';
 
 @NgModule({
   declarations: [
@@ -35,6 +36,7 @@ import { EmployeeDirectoryComponent } from './employee-directory/employee-direct
     SigninComponent,
     ForgotPasswordComponent,
     EmployeeDirectoryComponent,
+    FaqComponent,
   ],
   imports: [
     BrowserModule,
