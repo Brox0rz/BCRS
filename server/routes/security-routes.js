@@ -65,7 +65,6 @@ router.get('/test', (req, res) => {
   res.json({ message: 'Test route is working' });
 });
 
-
 /**
  * @swagger
  * /api/security/verify/users/{email}/security-questions:
@@ -198,7 +197,8 @@ router.post("/users/:email/reset-password", async (req, res) => {
       }
 
       // Update the user's password
-      await db.collection("users").updateOne({ email }, { $set: { password: newPassword } });
+      const hashedPassword = bcrypt.hashSync(newPassword, saltRounds); // Hash the new password
+      await db.collection("users").updateOne({ email }, { $set: { password: hashedPassword } });
 
       // Return a 200 response indicating success
       res.status(200).send({ message: "Password reset successfully" });
@@ -246,7 +246,7 @@ router.get('/:email/security-questions', (req, res, next) => {
       console.log('Selected security questions', user);
 
       if (!user) {
-        const err = new Error('Unable to find user with email' + email);
+        const err = new Error('Unable to find user with email ' + email);
         err.status = 404;
         console.log('err', err);
         next(err);
@@ -466,6 +466,9 @@ router.post('/signin', (req, res, next) => {
         // If the password matches; then return status code 200 with message "User sign in"
         console.log("Password matches!");
         res.send(user);
+      } else {
+        console.error('User not found!');
+        return next(createError(404, "User not found"));
       }
     }, next);
 
@@ -479,10 +482,10 @@ router.post('/signin', (req, res, next) => {
 /**
  * verify user by email
  * @openapi
- * /api/security/verify/users/{email}
+ * /api/security/verify/users/{email}:
  *  post:
  *    tags:
- *      -Security
+ *      - Security
  *    description: API for verifying a user exists
  *    summary: Verify a user exists
  *    parameters:
@@ -492,7 +495,7 @@ router.post('/signin', (req, res, next) => {
  *        description: Enter the email address for the user
  *        schema:
  *          type: string
- *    response:
+ *    responses:
  *      200:
  *        description: Success
  *      400:
@@ -502,8 +505,7 @@ router.post('/signin', (req, res, next) => {
  *      500: 
  *        description: Internal Server Error
  */
-
-router.post('/security/verify/users/:email', ( (req, res, next) => {
+router.post('/verify/users/:email', (req, res, next) => {
   try {
     //capture the email parameter
     const email = req.params.email;
@@ -532,7 +534,6 @@ router.post('/security/verify/users/:email', ( (req, res, next) => {
     next(err)
   }
  })
-)
 
   // Export the router
 module.exports = router;

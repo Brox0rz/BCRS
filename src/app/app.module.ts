@@ -2,7 +2,7 @@
  * Title: app.module.ts
  * Author: Professor Krasso and Brock Hemsouvanh
  * Date: 8/5/23
- * Updated: 07/12/2024 by Brock Hemsouvanh
+ * Updated: 07/14/2024 by Brock Hemsouvanh
  */
 
 // imports statements
@@ -18,11 +18,11 @@ import { NavComponent } from './layouts/nav/nav.component';
 import { FooterComponent } from './layouts/footer/footer.component';
 import { NotFoundPageComponent } from './not-found-page/not-found-page.component';
 import { AdminComponent } from './admin/admin.component';
-import { SigninComponent } from './signin/signin.component';
 import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
 import { CookieService } from 'ngx-cookie-service';
 import { EmployeeDirectoryComponent } from './employee-directory/employee-directory.component';
 import { FaqComponent } from './faq/faq.component';
+import { SecurityModule } from './security/security.module'; // Import the SecurityModule
 
 @NgModule({
   declarations: [
@@ -33,7 +33,6 @@ import { FaqComponent } from './faq/faq.component';
     FooterComponent,
     NotFoundPageComponent,
     AdminComponent,
-    SigninComponent,
     ForgotPasswordComponent,
     EmployeeDirectoryComponent,
     FaqComponent,
@@ -44,6 +43,7 @@ import { FaqComponent } from './faq/faq.component';
     ReactiveFormsModule,
     FormsModule,
     HttpClientModule,
+    SecurityModule // Add the SecurityModule here
   ],
   providers: [CookieService],
   bootstrap: [AppComponent]

@@ -1,9 +1,7 @@
-/**
- * Title: register-view-model.ts
- * Author: Professor Krasso
- * Date: 9/18/2023
- */
-import { selectedSecurityQuestionModel} from "./selected-security-questions-view-model"
+// src/app/security/register/register-view-model.ts
+
+import { SelectedSecurityQuestionsViewModel } from '../../models/selected-security-questions-view-model';
+
 /**
  * Interface for the RegisterViewModel
  * @property firstName
@@ -25,9 +23,9 @@ import { selectedSecurityQuestionModel} from "./selected-security-questions-view
  * }
  */
 export interface RegisterViewModel {
-    firstName: string,
-    lastName: string,
-    email: string,
-    password: string,
-    selectedSecurityQuestions: selectedSecurityQuestionsViewModel[]
+    firstName: string;
+    lastName: string;
+    email: string;
+    password: string;
+    selectedSecurityQuestions: SelectedSecurityQuestionsViewModel[];
 }

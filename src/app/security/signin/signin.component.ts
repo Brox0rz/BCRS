@@ -63,8 +63,8 @@ export class SigninComponent {
       return;
     }
     //call signin function from security service
-    this.secService.signIn(email, password).subscribe({
-      //if succesfful set session_user cookie and redirect user to logged in homepage
+    this.secService.signin(email, password).subscribe({
+      //if successful set session_user cookie and redirect user to logged in homepage
       next: (user: any) => {
         console.log('user', user);
         //create the sessionCookie object 
