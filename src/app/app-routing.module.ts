@@ -17,6 +17,7 @@ import { ForgotPasswordComponent } from './forgot-password/forgot-password.compo
 import { RegisterComponent } from './security/register/register.component';
 import { EmployeeDirectoryComponent } from './employee-directory/employee-directory.component'; // Import the component
 import { FaqComponent } from './faq/faq.component';
+import { PieComponent } from './pie/pie.component';
 
 // routes array with a path, component, and title for each route in the application
 const routes: Routes = [
