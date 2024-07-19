@@ -22,7 +22,8 @@ import { ForgotPasswordComponent } from './forgot-password/forgot-password.compo
 import { CookieService } from 'ngx-cookie-service';
 import { EmployeeDirectoryComponent } from './employee-directory/employee-directory.component';
 import { FaqComponent } from './faq/faq.component';
-import { SecurityModule } from './security/security.module'; // Import the SecurityModule
+import { SecurityModule } from './security/security.module';
+import { PieComponent } from './pie/pie.component'; 
 
 @NgModule({
   declarations: [
@@ -36,6 +37,7 @@ import { SecurityModule } from './security/security.module'; // Import the Secur
     ForgotPasswordComponent,
     EmployeeDirectoryComponent,
     FaqComponent,
+    PieComponent,
   ],
   imports: [
     BrowserModule,
