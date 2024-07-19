@@ -3,6 +3,7 @@
  * Author: Professor Krasso
  * Date: 07/07/2024
  * Modified By: Phuong Tran, Brock Hemsouvanh, and Mackenzie Lubben-Ortiz
+ * Updated: 07/19/2024 by Brock Hemsouvanh
  * Sources: https://github.com/buwebdev/web-450/tree/master/starter-projects/bcrs
 -->
 <br>
@@ -77,6 +78,32 @@
               <div class="alert alert-danger mt-2" *ngIf="registerForm.controls['lastName'].invalid && (registerForm.controls['lastName'].touched)">
                 <div *ngIf="registerForm.controls['lastName'].hasError('required')">
                   Last name is required
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-6">
+              <label class="form-label" for="address">Address:</label>
+              <input class="form-control" formControlName="address" type="text" id="address" name="address" required>
+
+              <!-- validation errors for address -->
+              <div class="alert alert-danger mt-2" *ngIf="registerForm.controls['address'].invalid && (registerForm.controls['address'].touched)">
+                <div *ngIf="registerForm.controls['address'].hasError('required')">
+                  Address is required
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label" for="phoneNumber">Phone Number:</label>
+              <input class="form-control" formControlName="phoneNumber" type="text" id="phoneNumber" name="phoneNumber" required>
+
+              <!-- validation errors for phone number -->
+              <div class="alert alert-danger mt-2" *ngIf="registerForm.controls['phoneNumber'].invalid && (registerForm.controls['phoneNumber'].touched)">
+                <div *ngIf="registerForm.controls['phoneNumber'].hasError('required')">
+                  Phone number is required
                 </div>
               </div>
             </div>
@@ -202,35 +229,6 @@
             </div>
           </div>
 
-          <!-- Question 5  -->
-          <div class="row">
-            <div class="col-md-6">
-              <label for="q5">Question:</label>
-              <select name="q5" id="q5" class="form-select" formControlName="question5">
-                <option *ngFor="let question of qArr5" [value]="question">{{ question }}</option>
-              </select>
-
-              <!-- validation errors for question 5-->
-              <div class="alert alert-danger mt-2" *ngIf="registerForm.controls['question5'].invalid && (registerForm.controls['question5'].touched)">
-                <div *ngIf="registerForm.controls['question5'].hasError('required')">
-                  Question is required.
-                </div>
-              </div>
-            </div>
-
-            <div class="col-md-6">
-              <label for="a5">Answer:</label>
-              <input type="text" id="a5" formControlName="answer5" name="a5" class="form-control" required>
-
-              <!-- validation errors for answer 5-->
-              <div class="alert alert-danger mt-2" *ngIf="registerForm.controls['answer5'].invalid && (registerForm.controls['answer5'].touched)">
-                <div *ngIf="registerForm.controls['answer5'].hasError('required')">
-                  Answer is required.
-                </div>
-              </div>
-            </div>
-          </div>
-
         </fieldset>
 
         <input type="submit" id="submit" [disabled]="!registerForm.valid" value="Register Account" class="btn btn-lg bg-dark-blue text-white">
@@ -239,3 +237,5 @@
     </div>
   </div>
 </div>
+<br />
+<br />

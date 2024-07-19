@@ -2,6 +2,7 @@
   Title: nav.component.html
   Authors: Brock Hemsouvanh, Phuong Tran
   Date: 07/07/2024
+  Updated: 07/19/2024 by Brock Hemsouvanh
   Description: Navigation component template for BCRS application
 -->
 
@@ -50,7 +51,7 @@
         <a class="nav-link" routerLink="/register">Register</a>
       </li>
       <!-- Sign In link (visible when not signed in) -->
-      <li  class="nav-item">
+      <li class="nav-item">
         <a class="nav-link" routerLink="/signin">Sign In</a>
       </li>
 
@@ -67,12 +68,12 @@
 
         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
           <li class="dropdown-item profileName">
-            Signed in as {{ appUser.fullName }}
+            Signed in as {{ appUser?.fullName }}
           </li>
           <li class="dropdown-item role">User Role</li>
           <hr />
           <li class="dropdown-item">
-            <a routerLink="/" class="dropdown-item menuItem">My Profile</a>
+            <a routerLink="/my-profile" class="dropdown-item menuItem">My Profile</a>
           </li>
           <li class="dropdown-item">
             <a routerLink="/" class="dropdown-item menuItem">User Configuration</a>

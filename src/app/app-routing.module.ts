@@ -2,10 +2,10 @@
  * Title: app-routing.module.ts
  * Author: Professor Krasso and Brock Hemsouvanh
  * Date: 07/04/24
- * Updated: 07/13/2024 by Brock Hemsouvanh
+ * Updated: 07/18/2024 by Brock Hemsouvanh
  */
 
-// imports statements
+// import statements
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { BaseLayoutComponent } from './layouts/base-layout/base-layout.component';
@@ -15,8 +15,9 @@ import { NotFoundPageComponent } from './not-found-page/not-found-page.component
 import { SigninComponent } from './signin/signin.component';
 import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
 import { RegisterComponent } from './security/register/register.component';
-import { EmployeeDirectoryComponent } from './employee-directory/employee-directory.component'; // Import the component
+import { EmployeeDirectoryComponent } from './employee-directory/employee-directory.component';
 import { FaqComponent } from './faq/faq.component';
+import { MyProfileComponent } from './my-profile/my-profile.component';
 
 // routes array with a path, component, and title for each route in the application
 const routes: Routes = [
@@ -64,6 +65,11 @@ const routes: Routes = [
         path: 'faq',
         component: FaqComponent,
         title: 'BCRS: Faq'
+      },
+      {
+        path: 'my-profile', // Add the route for MyProfileComponent
+        component: MyProfileComponent,
+        title: 'BCRS: My Profile'
       }
     ]
   },

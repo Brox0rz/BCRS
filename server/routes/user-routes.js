@@ -2,13 +2,18 @@
  * Title: user-routes.js
  * Author: Professor Richard Krasso and Brock Hemsouvanh
  * Date: 7/05/24
- * Updated: 07/12/2024 by Brock Hemsouvanh
+ * Updated: 07/19/2024 by Brock Hemsouvanh
  * Description: Routes for handling user-related API requests
+ * 
+ * This code was developed with reference to the article on using bcrypt in Node.js:
+ * https://www.freecodecamp.org/news/how-to-hash-passwords-with-bcrypt-in-nodejs/
+ * 
  */
 
 "use strict";
 
 const express = require("express");
+const bcrypt = require('bcrypt');
 const { mongo } = require("../utils/mongo");
 const createError = require("http-errors");
 const { ObjectId } = require('mongodb');
@@ -115,10 +120,13 @@ router.post("/", async (req, res) => {
   console.log("Let's create a new user!");
   try {
     console.log(`email: ${req.body.email}`);
+    
+    // Hash the password
+    const hashedPassword = await bcrypt.hash(req.body.password, 10);
 
     const newUser = {
       email: req.body.email,
-      password: req.body.password,
+      password: hashedPassword,
       firstName: req.body.firstName,
       lastName: req.body.lastName,
       phoneNumber: req.body.phoneNumber,
@@ -227,8 +235,6 @@ router.delete("/:userId", async (req, res) => {
  *      500: 
  *         description: Internal Server Error
  */
-
-// findAllUsers
 router.get('/users', (req, res, next) => {
   try {
     mongo(async db => {
@@ -276,8 +282,6 @@ router.get('/users', (req, res, next) => {
  *      500: 
  *         description: Internal Server Error
  */
-
-// findUserById
 router.get('/:userId', (req, res, next) => {
   try {
     let { userId } = req.params; // user Id
@@ -341,9 +345,9 @@ router.get('/:userId', (req, res, next) => {
  *         description: Bad Request
  *       404:
  *         description: User not found
- *       500:
+ *       500: 
  *         description: Internal Server Error
- *       501:
+ *       501: 
  *         description: Database Error
  */
 router.put('/:userId', (req, res, next) => {
@@ -369,6 +373,196 @@ router.put('/:userId', (req, res, next) => {
     }, next);
   } catch (err) {
     console.log('err', err);
+    next(err);
+  }
+});
+
+/**
+ * @swagger
+ * /api/users/profile/{email}:
+ *   get:
+ *     summary: Get user profile by email
+ *     tags: [User]
+ *     parameters:
+ *       - in: path
+ *         name: email
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: The email of the user to fetch profile data
+ *     responses:
+ *       200:
+ *         description: User profile retrieved successfully
+ *       400:
+ *         description: Bad Request
+ *       404:
+ *         description: Not Found
+ *       500:
+ *         description: Internal Server Error
+ */
+router.get('/profile/:email', async (req, res) => {
+  try {
+    const email = req.params.email;
+
+    mongo(async (db) => {
+      const user = await db.collection('users').findOne({ email: email });
+
+      if (!user) {
+        return res.status(404).send({ message: 'User not found' });
+      }
+
+      res.status(200).send(user);
+    });
+  } catch (e) {
+    console.log(e);
+    res.status(500).send({
+      message: `Internal Server Error: ${e.message}`,
+    });
+  }
+});
+
+/**
+ * @swagger
+ * /api/users/profile/{email}/update-profile:
+ *   put:
+ *     summary: Update user profile by email
+ *     tags: [User]
+ *     parameters:
+ *       - in: path
+ *         name: email
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: The email of the user to update profile data
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               address:
+ *                 type: string
+ *               phoneNumber:
+ *                 type: string
+ *     responses:
+ *       204:
+ *         description: Profile updated successfully
+ *       400:
+ *         description: Bad Request
+ *       404:
+ *         description: Not Found
+ *       500:
+ *         description: Internal Server Error
+ */
+router.put('/profile/:email/update-profile', async (req, res) => {
+  try {
+    const email = req.params.email;
+    const updateData = req.body;
+
+    mongo(async (db) => {
+      const result = await db.collection('users').updateOne(
+        { email: email },
+        { $set: updateData }
+      );
+
+      if (result.matchedCount === 0) {
+        return res.status(404).send({ message: 'User not found' });
+      }
+
+      res.status(204).send();
+    });
+  } catch (e) {
+    console.log(e);
+    res.status(500).send({
+      message: `Internal Server Error: ${e.message}`,
+    });
+  }
+});
+
+/**
+ * @swagger
+ * /api/security/signin:
+ *   post:
+ *     tags:
+ *       - Security
+ *     description: API for signing in users
+ *     summary: User Sign in
+ *     requestBody:
+ *       description: User Information
+ *       content:
+ *         application/json:
+ *           schema:
+ *             required:
+ *               - email
+ *               - password
+ *             properties:
+ *               email:
+ *                 type: string
+ *               password:
+ *                 type: string
+ *     responses:
+ *       '201':
+ *         description: User Sign In Successfully
+ *       '400':
+ *         description: Bad request
+ *       '401':
+ *         description: Invalid Credentials
+ *       '500':
+ *         description: Server Exception
+ *       '501':
+ *         description: MongoDB Exception
+ */
+router.post('/signin', (req, res, next) => {
+  try {
+
+    console.log("User signing in...");
+    // Get the email address and password from the request body
+    const signIn = req.body;
+
+    // Validate the sign in data against the signInSchema
+    const validate = ajv.compile(signInSchema);
+    const valid = validate(signIn);
+
+    // If the signIn object is not valid; then return a 400 status code with message 'Bad request'
+    if(!valid) {
+      console.error('Error validating the signIn data with the signInSchema!');
+      console.log('signIn validation error: ', validate.errors);
+      return next(createError(400, `Bad request: ${validate.errors}`));
+    }
+
+    // Call mongo and log in user
+    mongo(async db => {
+      console.log("Looking up the user...");
+      // Find the user
+      const user = await db.collection("users").findOne({
+        email: signIn.email
+      });
+
+      // If the user is found; Then compare password passed in from the body with the password in the database
+      if (user) {
+        console.log("User found!");
+        console.log("Comparing passwords...");
+        // Compare the password
+        let passwordIsValid = bcrypt.compareSync(signIn.password, user.password);
+
+        // Else if the password doesn't match; then return status code 400 with message "Invalid credentials"
+        if (!passwordIsValid) {
+          console.error('Invalid password!');
+          return next(createError(401, "Unauthorized"));
+        }
+        // If the password matches; then return status code 200 with message "User sign in"
+        console.log("Password matches!");
+        res.send(user);
+      } else {
+        console.error('User not found!');
+        return next(createError(404, "User not found"));
+      }
+    }, next);
+
+    // Catch any Database errors
+  } catch (err) {
+    console.error("Error: ", err);
     next(err);
   }
 });
