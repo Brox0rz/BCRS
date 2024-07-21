@@ -5,6 +5,7 @@
  * Updated: 07/20/2024 by Brock Hemsouvanh and Mackenzie Lubben-Ortiz
  */
 
+// import statements
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
@@ -33,7 +34,8 @@ const routes: Routes = [
       { path: 'forgot-password', component: ForgotPasswordComponent, title: 'BCRS: Forgot Password' },
       { path: 'employee-directory', component: EmployeeDirectoryComponent, title: 'BCRS: Employee Directory' },
       { path: 'faq', component: FaqComponent, title: 'BCRS: FAQ' },
-      { path: 'my-profile', component: MyProfileComponent, title: 'BCRS: My Profile' }
+      { path: 'my-profile', component: MyProfileComponent, title: 'BCRS: My Profile' },
+      { path: 'pie', component: PieComponent, title: 'BCRS: Pie' }  // Added missing route for PieComponent
     ]
   },
   { path: '**', component: NotFoundPageComponent, title: 'BCRS: 404 Not Found' }

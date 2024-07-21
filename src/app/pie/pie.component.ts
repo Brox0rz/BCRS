@@ -1,9 +1,10 @@
 /**
- * Title: Pie Chart
+ * Title: Purchases By Service Graph
  * Author: Mackenzie Lubben-Ortiz
  * Date: 18 July 2024
- * Description: purchase by service pie graph
+ * Description: BCRS purchase by service graph
  */
+
 import { Component, OnInit } from '@angular/core';
 import { Chart, registerables } from 'chart.js';
 Chart.register(...registerables);
@@ -45,5 +46,4 @@ export class PieComponent implements OnInit {
       }
     })
   }
-
 }
