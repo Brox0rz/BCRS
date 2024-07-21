@@ -28,6 +28,8 @@ import { CookieService } from 'ngx-cookie-service';
 import { EmployeeService } from './services/employee.service';
 import { AuthService } from './services/auth.service';
 import { SecurityModule } from './security/security.module';
+import { ServiceRequestComponent } from './service-request/service-request.component';
+import { InvoiceSummaryComponent } from './invoice-summary/invoice-summary.component';
 
 @NgModule({
   declarations: [
@@ -43,6 +45,8 @@ import { SecurityModule } from './security/security.module';
     FaqComponent,
     MyProfileComponent,
     PieComponent,
+    ServiceRequestComponent,
+    InvoiceSummaryComponent,
   ],
   imports: [
     BrowserModule,
