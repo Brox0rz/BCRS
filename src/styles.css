@@ -13,7 +13,7 @@ body, html {
 
 /* Add margin to main content to prevent overlap with navbar */
 main {
-  margin-top: 150px; /* Adjust this value based on the height of your navbar */
+  margin-top: 150px; /* Adjust this value based on the height of the navbar */
 }
 
 /* Navbar Styles */
