@@ -10,8 +10,8 @@ The BCRS project benefits both customers and employees of Bob's Computer Repair 
 
 ### Contributors
 
-- **Brock Hemsouvanh**: Developer, contributed to the development of the frontend components and backend services.
-- **Phuong Tran**: Developer, focused on user authentication, data validation, and form handling.
+- **Brock Hemsouvanh**: Developer, contributed to the development of the frontend components, many of the backend services, and some basic vanilla styling.
+- **Phuong Tran**: Developer, focused on user authentication, data validation, form handling, and overall application styling.
 - **Mackenzie Lubben-Ortiz**: Developer, worked on the integration of charts and graphs, as well as overall application styling.
 - **Professor Richard Krasso**: Project Supervisor, provided guidance and oversight for the project development.
 
