@@ -2,7 +2,7 @@
  * Title: app-routing.module.ts
  * Author: Professor Krasso and Brock Hemsouvanh
  * Date: 07/04/24
- * Updated: 07/20/2024 by Brock Hemsouvanh and Mackenzie Lubben-Ortiz
+ * Updated: 07/21/2024 by Brock Hemsouvanh and Mackenzie Lubben-Ortiz
  */
 
 import { NgModule } from '@angular/core';
@@ -19,6 +19,8 @@ import { EmployeeDirectoryComponent } from './employee-directory/employee-direct
 import { FaqComponent } from './faq/faq.component';
 import { MyProfileComponent } from './my-profile/my-profile.component';
 import { authGuard } from './auth.guard';
+import { ServiceRequestComponent } from './service-request/service-request.component';
+import { InvoiceSummaryComponent } from './invoice-summary/invoice-summary.component';
 
 const routes: Routes = [
   {
@@ -33,7 +35,9 @@ const routes: Routes = [
       { path: 'forgot-password', component: ForgotPasswordComponent, title: 'BCRS: Forgot Password' },
       { path: 'employee-directory', component: EmployeeDirectoryComponent, title: 'BCRS: Employee Directory', canActivate: [authGuard] },
       { path: 'faq', component: FaqComponent, title: 'BCRS: FAQ' },
-      { path: 'my-profile', component: MyProfileComponent, title: 'BCRS: My Profile', canActivate: [authGuard] }
+      { path: 'my-profile', component: MyProfileComponent, title: 'BCRS: My Profile', canActivate: [authGuard] },
+      { path: 'service-request', component: ServiceRequestComponent, title: 'BCRS: Service Request', canActivate: [authGuard] },
+      { path: 'invoice-summary', component: InvoiceSummaryComponent, title: 'BCRS: Invoice Summary', canActivate: [authGuard] }
     ]
   },
   { path: '**', component: NotFoundPageComponent, title: 'BCRS: 404 Not Found' }

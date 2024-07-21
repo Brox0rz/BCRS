@@ -56,4 +56,9 @@ export class NavComponent implements OnInit {
     // Redirect to the home page
     this.router.navigate(['/']);
   }
+
+  // Log function for dropdown toggle
+  logDropdownToggle(): void {
+    console.log('Dropdown toggle clicked');
+  }
 }

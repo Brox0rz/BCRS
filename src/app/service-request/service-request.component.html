@@ -1,1 +1,147 @@
-<p>service-request works!</p>
+<!--
+  Title: service-request.component.html
+  Authors: Brock Hemsouvanh, Phuong Tran
+  Date: 07/07/2024
+  Updated: 07/21/2024 by Brock Hemsouvanh
+  Description: Service Request component template for BCRS application
+-->
+
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="col-12 my-2 mb-3">
+      <br>
+      <h3 class="text-center text-color">Service Request</h3>
+    </div>
+
+    <!-- Form -->
+    <div class="col mt-3">
+      <div>
+        <table class="table table-bordered table-hover table-striped">
+          <thead>
+            <tr>
+              <th>Service Name</th>
+              <th>Service Price</th>
+              <th>Select</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Loop through services and display in a table -->
+            <tr>
+              <td>Password Reset</td>
+              <td>$39.99</td>
+              <td>
+                <!-- Checkbox for selecting services -->
+                <input type="checkbox" class="form-check-input"/>
+              </td>
+            </tr>
+            <tr>
+              <td>Spyware Removal</td>
+              <td>$99.99</td>
+              <td>
+                <!-- Checkbox for selecting services -->
+                <input type="checkbox" class="form-check-input"/>
+              </td>
+            </tr>
+            <tr>
+              <td>RAM Upgrade</td>
+              <td>$129.99</td>
+              <td>
+                <!-- Checkbox for selecting services -->
+                <input type="checkbox" class="form-check-input"/>
+              </td>
+            </tr>
+            <tr>
+              <td>Software Installation</td>
+              <td>$49.99</td>
+              <td>
+                <!-- Checkbox for selecting services -->
+                <input type="checkbox" class="form-check-input"/>
+              </td>
+            </tr>
+            <tr>
+              <td>Keyboard Cleaning</td>
+              <td>$45.00</td>
+              <td>
+                <!-- Checkbox for selecting services -->
+                <input type="checkbox" class="form-check-input"/>
+              </td>
+            </tr>
+            <tr>
+              <td>Disk Clean Up</td>
+              <td>$129.99</td>
+              <td>
+                <!-- Checkbox for selecting services -->
+                <input type="checkbox" class="form-check-input"/>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div>
+        <div class="mb-3">
+          <!-- Input field for parts amount -->
+          <label for="" class="form-label fw-bold">Parts Amount:</label>
+          <input type="number" id="" class="form-control" formControlName="partsAmount" placeholder="0" min="0"/>
+        </div>
+        <div class="mb-3">
+          <!-- Input field for labor amount -->
+          <label for="" class="form-label fw-bold">Labor Amount: <span id="hourRate">($50/hr)</span></label>
+          <input type="number" id="" class="form-control" formControlName="laborAmount" placeholder="0" min="0"/>
+        </div>
+      </div>
+    </div>
+
+    <div class="col">
+      <form [formGroup]="serviceRequestForm" (ngSubmit)="onSubmit()">
+        <div class="row">
+          <div class="col align-right d-flex flex-column bd-highlight mb-3">
+            <label for="" class="form-label fw-bold">Date:</label>
+            <input type="date" id="txtOrderDate" class="form-control" formControlName="orderDate" placeholder="Order Date" required />
+          </div>
+          <br>
+
+          <div class="d-flex flex-column bd-highlight">
+            <div class="mb-3">
+              <label for="" class="form-label fw-bold">Name:</label>
+              <input type="text" id="" class="form-control" formControlName="customerFullName" placeholder="Enter Customer's Full Name"/>
+            </div>
+          </div>
+          <br>
+
+          <div class="d-flex flex-column bd-highlight mb-3">
+            <div>
+              <!-- Input field for customer email -->
+              <label for="" class="form-label fw-bold">Email:</label>
+              <input type="email" id="" class="form-control" formControlName="customerEmail" placeholder="Enter Customer's Email"/>
+            </div>
+          </div>
+          <br>
+          <br>
+          <br>
+          <br>
+          <div class="d-flex flex-column bd-highlight mb-3">
+            <!-- Display the calculated total price of service -->
+            <div class="d-md-block">
+              <label for="" class="form-label fw-bold">Line Item Amount:</label>
+            </div>
+          </div>
+
+          <div class="d-flex flex-column bd-highlight mb-3">
+            <!-- Display the total price -->
+            <div class="d-md-block">
+              <label for="" class="form-label fw-bold">Invoice:</label>
+            </div>
+          </div>
+          <br>
+          <br>
+          <br>
+          <!-- Submit button for creating the invoice -->
+          <div class="text-center">
+            <button class="btn btn-color btn-size fw-bold mt-2" type="submit">Submit</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

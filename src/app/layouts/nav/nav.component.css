@@ -2,6 +2,7 @@
  * Title: nav.component.css
  * Author: Brock Hemsouvanh, Phuong Tran, Mackenzie Lubbon-Ortiz
  * Date: 07/08/2024
+ * Updated: 07/21/2024 by Brock Hemsouvanh
  * Description: CSS styles for the navigation component in the BCRS application
  * Sources: BCRS Starter Project: https://github.com/buwebdev/web-450/tree/master/starter-projects/bcrs
  */
@@ -90,4 +91,10 @@
 .dropdown-item:focus {
   color: #946B2D; /* Bronze */
   background-color: transparent;
+}
+
+.greeting-message {
+  color: #C0C0C0; /* Silver */
+  font-weight: 600;
+  margin-left: 10px;
 }
