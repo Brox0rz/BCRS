@@ -2,7 +2,7 @@
  * Title: app.js
  * Author: Professor Krasso and Brock Hemsouvanh
  * Date: 07/03/2024
- * Updated: 07/14/2024 by Brock Hemsouvanh
+ * Updated: 07/18/2024 by Brock Hemsouvanh
  */
 'use strict'
 
@@ -12,6 +12,7 @@ const createError = require('http-errors');
 const path = require('path');
 const userRoutes = require("./routes/user-routes");
 const securityRoutes = require("./routes/security-routes");
+const serviceRoutes = require("./routes/service-routes");
 const swaggerJsdoc = require('swagger-jsdoc');
 const swaggerUi = require('swagger-ui-express');
 
@@ -51,6 +52,7 @@ app.use(express.urlencoded({ extended: true })); // Middleware to parse URL-enco
 // API routes
 app.use("/api/users", userRoutes); // Route for user-related API endpoints
 app.use("/api/security", securityRoutes); // Route for security-related API endpoints
+app.use("/api/invoices", serviceRoutes); // Route for invoice-related API endpoints
 
 // Swagger setup
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec)); // Serve the Swagger API docs
