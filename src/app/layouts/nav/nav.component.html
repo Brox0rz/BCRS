@@ -2,7 +2,7 @@
   Title: nav.component.html
   Authors: Brock Hemsouvanh, Phuong Tran
   Date: 07/07/2024
-  Updated: 07/19/2024 by Brock Hemsouvanh
+  Updated: 07/21/2024 by Brock Hemsouvanh
   Description: Navigation component template for BCRS application
 -->
 
@@ -47,11 +47,11 @@
         <a routerLink="/employee-directory" class="nav-link">Employee Directory</a>
       </li>
       <!-- Register Link for new user -->
-      <li class="nav-item" routerLinkActive="active">
+      <li class="nav-item" routerLinkActive="active" *ngIf="!isSignedIn">
         <a class="nav-link" routerLink="/register">Register</a>
       </li>
       <!-- Sign In link (visible when not signed in) -->
-      <li class="nav-item">
+      <li class="nav-item" *ngIf="!isSignedIn">
         <a class="nav-link" routerLink="/signin">Sign In</a>
       </li>
 
@@ -82,7 +82,7 @@
             <a routerLink="/" class="dropdown-item menuItem">Purchases By Service</a>
           </li>
           <li class="dropdown-item">
-            <a class="dropdown-item menuItem">Log Out</a>
+            <a (click)="signout()" class="dropdown-item menuItem">Log Out</a>
           </li>
         </ul>
       </li>

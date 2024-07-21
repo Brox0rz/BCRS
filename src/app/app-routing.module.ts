@@ -18,7 +18,7 @@ import { RegisterComponent } from './security/register/register.component';
 import { EmployeeDirectoryComponent } from './employee-directory/employee-directory.component';
 import { FaqComponent } from './faq/faq.component';
 import { MyProfileComponent } from './my-profile/my-profile.component';
-import { PieComponent } from './pie/pie.component';
+import { authGuard } from './auth.guard';
 
 const routes: Routes = [
   {
@@ -29,11 +29,11 @@ const routes: Routes = [
       { path: 'home', component: HomeComponent, data: { hideNavbar: true }, title: 'BCRS: Home' },
       { path: 'signin', component: SigninComponent, title: 'BCRS: Sign In' },
       { path: 'register', component: RegisterComponent, title: 'BCRS: Register' },
-      { path: 'admin', component: AdminComponent, title: 'BCRS: Admin' },
+      { path: 'admin', component: AdminComponent, title: 'BCRS: Admin', canActivate: [authGuard] },
       { path: 'forgot-password', component: ForgotPasswordComponent, title: 'BCRS: Forgot Password' },
-      { path: 'employee-directory', component: EmployeeDirectoryComponent, title: 'BCRS: Employee Directory' },
+      { path: 'employee-directory', component: EmployeeDirectoryComponent, title: 'BCRS: Employee Directory', canActivate: [authGuard] },
       { path: 'faq', component: FaqComponent, title: 'BCRS: FAQ' },
-      { path: 'my-profile', component: MyProfileComponent, title: 'BCRS: My Profile' }
+      { path: 'my-profile', component: MyProfileComponent, title: 'BCRS: My Profile', canActivate: [authGuard] }
     ]
   },
   { path: '**', component: NotFoundPageComponent, title: 'BCRS: 404 Not Found' }

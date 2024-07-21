@@ -2,7 +2,7 @@
  * Title: nav.component.ts
  * Author: Professor Krasso and Brock Hemsouvanh
  * Date: 8/5/23
- * Updated: 07/19/2024 by Brock Hemsouvanh
+ * Updated: 07/21/2024 by Brock Hemsouvanh
  */
 
 // Import statements
