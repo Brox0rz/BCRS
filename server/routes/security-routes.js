@@ -2,7 +2,7 @@
  * Title: security-routes.js
  * Author: Professor Richard Krasso, Brock Hemsouvanh, Mackenzie Lubben-Ortiz, and Phuong Tran
  * Date: 7/10/24
- * Updated: 07/14/2024 by Brock Hemsouvanh, Phuong Tran, Mackenzie Lubben-Ortiz
+ * Updated: 07/19/2024 by Brock Hemsouvanh
  * Description: Routes for handling security-related API requests
  */
 
@@ -328,7 +328,7 @@ router.post('/register', (req, res, next) => {
     const valid = validate(user);
 
     // If the user object is not valid; then return a status code 400 with message 'Bad request'
-    if(!valid) {
+    if (!valid) {
       console.error('User object does not match the registerSchema: ', validate.errors);
       return next(createError(400, `Bad request: ${validate.errors}`));
     }
@@ -345,9 +345,9 @@ router.post('/register', (req, res, next) => {
       console.log("Checking if the user email exists in the database...");
       // Get all the users from the database and sort them by the userId
       const users = await db.collection('users')
-      .find()
-      .sort({ userId: 1 })
-      .toArray();
+        .find()
+        .sort({ userId: 1 })
+        .toArray();
 
       // Check if the user exists already in the database
       const existingUser = users.find(u => u.email === user.email);
@@ -359,10 +359,12 @@ router.post('/register', (req, res, next) => {
       }
 
       // Create the new userId for the registering user by getting the lastUser's userId and adding 1 to it
-      const lastUser = users[users.length - 1];
-      console.log(`lastUserId: ${lastUser.userId}\n First name: ${lastUser.firstName}\n Last name: ${lastUser.lastName}`);
-
-      const newUserId = lastUser.userId + 1;
+      let newUserId = 1;
+      if (users.length > 0) {
+        const lastUser = users[users.length - 1];
+        console.log(`lastUserId: ${lastUser.userId}\n First name: ${lastUser.firstName}\n Last name: ${lastUser.lastName}`);
+        newUserId = lastUser.userId + 1;
+      }
       console.log('new userId:' + newUserId);
 
       // Create the new user object for standard role
@@ -437,7 +439,7 @@ router.post('/signin', (req, res, next) => {
     const valid = validate(signIn);
 
     // If the signIn object is not valid; then return a 400 status code with message 'Bad request'
-    if(!valid) {
+    if (!valid) {
       console.error('Error validating the signIn data with the signInSchema!');
       console.log('signIn validation error: ', validate.errors);
       return next(createError(400, `Bad request: ${validate.errors}`));
@@ -535,5 +537,5 @@ router.post('/verify/users/:email', (req, res, next) => {
   }
  })
 
-  // Export the router
+// Export the router
 module.exports = router;
