@@ -25,39 +25,40 @@ export class NavComponent implements OnInit {
   appUser: AppUser | null = null;
   isSignedIn: boolean = false;
 
-  // Constructor with cookieService, router, and authService dependencies
   constructor(private cookieService: CookieService, private router: Router, private authService: AuthService) {}
 
   ngOnInit(): void {
     this.authService.isLoggedIn().subscribe((loggedIn) => {
       this.isSignedIn = loggedIn;
+      console.log('Is Signed In:', this.isSignedIn);
       this.setUserDetails();
     });
   }
 
-  // Set the appUser object if the user is signed in
   setUserDetails(): void {
     if (this.isSignedIn) {
       const sessionUser = this.cookieService.get('session_user');
-      const sessionName = this.cookieService.get('session_name');
-      
-      if (sessionUser && sessionName) {
-        this.appUser = { fullName: sessionName };
+      if (sessionUser) {
+        const user = JSON.parse(sessionUser);
+        this.appUser = { fullName: user.firstName + ' ' + user.lastName };
         console.log('Signed in as', this.appUser.fullName);
+      } else {
+        console.log('No session user found in cookies.');
       }
+    } else {
+      this.appUser = null;
+      console.log('User is not signed in.');
     }
   }
 
-  // Signout function to clear the session cookie
   signout(): void {
     console.log('Clearing cookies');
-    // Delete all cookies
     this.cookieService.deleteAll();
-    // Redirect to the home page
+    this.isSignedIn = false;
+    this.appUser = null;
     this.router.navigate(['/']);
   }
 
-  // Log function for dropdown toggle
   logDropdownToggle(): void {
     console.log('Dropdown toggle clicked');
   }

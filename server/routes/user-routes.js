@@ -285,6 +285,9 @@ router.get('/users', (req, res, next) => {
 router.get('/:userId', (req, res, next) => {
   try {
     let { userId } = req.params; // user Id
+    if (!ObjectId.isValid(userId)) {
+      return res.status(400).send({ message: "Invalid userId" });
+    }
     userId = new ObjectId(userId);
 
     mongo(async db => {
@@ -353,6 +356,9 @@ router.get('/:userId', (req, res, next) => {
 router.put('/:userId', (req, res, next) => {
   try {
     let { userId } = req.params;
+    if (!ObjectId.isValid(userId)) {
+      return res.status(400).send({ message: "Invalid userId" });
+    }
     userId = new ObjectId(userId);
 
     mongo(async db => {

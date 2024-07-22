@@ -44,12 +44,10 @@ export class SigninComponent {
 
   signIn(): void {
     if (this.signinForm.valid) {
-      // Spinner
       this.isLoading = true;
 
       const { email, password } = this.signinForm.value;
 
-      // If email and password fields are empty, display error message
       if (!email) {
         this.errMessage = 'Please provide your email address';
         this.isLoading = false;
@@ -60,12 +58,10 @@ export class SigninComponent {
         this.isLoading = false;
         return;
       }
-      // Call signin function from security service
+      
       this.secService.signin(email, password).subscribe({
-        // If successful, set session_user cookie and redirect user to logged in homepage
         next: (user: any) => {
           console.log('user', user);
-          // Create the sessionCookie object 
           const sessionCookie = {
             userId: user.userId,
             firstName: user.firstName,
@@ -77,19 +73,13 @@ export class SigninComponent {
             role: user.role,
             selectedSecurityQuestions: user.selectedSecurityQuestions
           };
-          // Set session user 
           this.cookieService.set('session_user', JSON.stringify(sessionCookie), 1);
 
-          // Check if there is a return URL, if not redirect to home page
-          const returnUrl = this.route.snapshot.queryParamMap.get('returnUrl') || '/';
-          // Set is loading to false when logged in 
           this.isLoading = false;
-          // Redirect user to the returnURL 
-          this.router.navigate([returnUrl]);
+          this.router.navigate(['/service-request']);
         },
         error: (err) => {
           this.isLoading = false;
-
           console.log('err', err);
           if (err.error.status === 400) {
             this.errMessage = 'Invalid email and/or password. Please try again.'

@@ -2,7 +2,7 @@
  * Title: my-profile.component.ts
  * Author: Professor Richard Krasso and Brock Hemsouvanh
  * Date: 07/18/2024
- * Updated: 07/19/2024 by Brock Hemsouvanh
+ * Updated: 07/21/2024 by Brock Hemsouvanh
  * Description: Component for managing the user's profile
  */
 
@@ -35,19 +35,27 @@ export class MyProfileComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    const email = this.cookieService.get('session_user'); // Get email from cookie
-    // Fetch the employee details by email
-    this.employeeService.getEmployeeByEmail(email).subscribe(
-      data => {
-        this.employee = data;
-        // Populate the form with fetched employee data
-        this.profileForm.patchValue({
-          address: this.employee.address,
-          phoneNumber: this.employee.phoneNumber
-        });
-      },
-      err => this.errorMessage = err.error.message // Handle error
-    );
+    const sessionUser = this.cookieService.get('session_user'); // Get session user data from cookie
+    if (sessionUser) {
+      const user = JSON.parse(sessionUser);
+      const userId = user._id; // Use userId instead of email
+
+      // Fetch the employee details by userId
+      this.employeeService.getEmployeeById(userId).subscribe(
+        data => {
+          this.employee = data;
+          // Populate the form with fetched employee data
+          this.profileForm.patchValue({
+            address: this.employee.address,
+            phoneNumber: this.employee.phoneNumber
+          });
+        },
+        err => {
+          this.errorMessage = err.error.message; // Handle error
+          console.error('Error fetching employee data:', err);
+        }
+      );
+    }
   }
 
   // Method to save changes made to the profile
@@ -56,8 +64,15 @@ export class MyProfileComponent implements OnInit {
       const { address, phoneNumber } = this.profileForm.value;
       // Call the service to update employee profile
       this.employeeService.updateEmployeeProfile(this.employee.email, address, phoneNumber).subscribe(
-        res => this.successMessage = 'Profile updated successfully!', // Handle success
-        err => this.errorMessage = err.error.message // Handle error
+        res => {
+          this.successMessage = 'Profile updated successfully!'; // Handle success
+          // Optionally refresh the data to reflect changes immediately
+          this.ngOnInit();
+        },
+        err => {
+          this.errorMessage = err.error.message; // Handle error
+          console.error('Error updating employee profile:', err);
+        }
       );
     }
   }

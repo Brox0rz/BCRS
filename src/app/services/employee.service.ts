@@ -2,7 +2,7 @@
  * Title: employee.service.ts
  * Author: Brock Hemsouvanh
  * Date: 07/18/2024
- * Updated: 07/19/2024 by Brock Hemsouvanh
+ * Updated: 07/21/2024 by Brock Hemsouvanh
  * Description: Service for handling employee-related API requests
  */
 
@@ -20,11 +20,11 @@ export class EmployeeService {
 
   /**
    * Method to get employee details by ID
-   * @param employeeId - The ID of the employee
+   * @param userId - The ID of the employee
    * @returns Observable<any> - The employee details
    */
-  getEmployeeById(employeeId: string): Observable<any> {
-    return this.http.get(`${this.apiUrl}/${employeeId}`);
+  getEmployeeById(userId: string): Observable<any> {
+    return this.http.get(`${this.apiUrl}/${userId}`);
   }
 
   /**
