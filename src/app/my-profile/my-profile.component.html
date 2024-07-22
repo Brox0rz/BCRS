@@ -18,11 +18,7 @@
           <div class="profile-image">
             <img
               src="/src/assets/profile-circle.512x512.png"
-              style="
-                height: 150px;
-                border-radius: 50%;
-                border: 10px solid #3d3d3d;
-              "
+              style="height: 150px; border-radius: 50%; border: 10px solid #3d3d3d;"
               alt="User profile picture."
             />
           </div>
@@ -32,7 +28,7 @@
               <h6 class="mb-0">Employee ID</h6>
             </div>
             <div class="col-sm-9 text-secondary">
-              {{ employee.userId }}
+              {{ employee._id }}
             </div>
           </div>
           <hr />
@@ -87,13 +83,7 @@
           </div>
           <hr />
           <!-- Edit Button to open offcanvas for editing profile -->
-          <button
-            class="btn btn-dark"
-            type="button"
-            data-bs-toggle="offcanvas"
-            data-bs-target="#offcanvasRight"
-            aria-controls="offcanvasRight"
-          >
+          <button class="btn btn-dark" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">
             Edit
           </button>
         </div>
@@ -103,8 +93,7 @@
       <div class="card h-100">
         <div class="card-body">
           <h6 class="d-flex align-items-center mb-3">
-            <i class="material-icons text-primary mr-2">settings</i>System
-            Settings
+            <i class="material-icons text-primary mr-2">settings</i>System Settings
           </h6>
           <!-- Display Language -->
           <div class="row">
@@ -128,20 +117,10 @@
     </div>
   </div>
   <!-- Offcanvas for editing profile -->
-  <div
-    class="offcanvas offcanvas-end"
-    tabindex="-1"
-    id="offcanvasRight"
-    aria-labelledby="offcanvasRightLabel"
-  >
+  <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
     <div class="offcanvas-header">
       <h5 id="offcanvasRightLabel">Profile Settings</h5>
-      <button
-        type="button"
-        class="btn-close text-reset"
-        data-bs-dismiss="offcanvas"
-        aria-label="Close"
-      ></button>
+      <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
     </div>
     <div class="offcanvas-body">
       <form [formGroup]="profileForm" (ngSubmit)="saveChanges()">
@@ -157,21 +136,10 @@
           <!-- Input for Address -->
           <div class="mb-3">
             <label for="address" class="form-label">Address</label>
-            <input
-              type="text"
-              id="address"
-              name="address"
-              class="form-control"
-              formControlName="address"
-              required
-            />
+            <input type="text" id="address" name="address" class="form-control" formControlName="address" required />
             <!-- Validation errors for Address -->
             <div
-              *ngIf="
-                profileForm.controls['address'].invalid &&
-                (profileForm.controls['address'].dirty ||
-                  profileForm.controls['address'].touched)
-              "
+              *ngIf="profileForm.controls['address'].invalid && (profileForm.controls['address'].dirty || profileForm.controls['address'].touched)"
               class="alert alert-danger mt-2"
             >
               Address is required.
@@ -180,32 +148,17 @@
           <!-- Input for Phone Number -->
           <div class="mb-3">
             <label for="phoneNumber" class="form-label">Phone Number</label>
-            <input
-              type="text"
-              id="phoneNumber"
-              name="phoneNumber"
-              class="form-control"
-              formControlName="phoneNumber"
-              required
-            />
+            <input type="text" id="phoneNumber" name="phoneNumber" class="form-control" formControlName="phoneNumber" required />
             <!-- Validation errors for Phone Number -->
             <div
-              *ngIf="
-                profileForm.controls['phoneNumber'].invalid &&
-                (profileForm.controls['phoneNumber'].dirty ||
-                  profileForm.controls['phoneNumber'].touched)
-              "
+              *ngIf="profileForm.controls['phoneNumber'].invalid && (profileForm.controls['phoneNumber'].dirty || profileForm.controls['phoneNumber'].touched)"
               class="alert alert-danger mt-2"
             >
               Phone number is required.
             </div>
           </div>
           <!-- Save Changes Button -->
-          <button
-            type="submit"
-            [disabled]="!profileForm.valid"
-            class="btn btn-dark w-100"
-          >
+          <button type="submit" [disabled]="!profileForm.valid" class="btn btn-dark w-100">
             Save Changes
           </button>
         </fieldset>

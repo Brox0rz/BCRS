@@ -6,7 +6,7 @@
  * Description: Component for managing the user's profile
  */
 
-'use strict';
+'use strict'; 
 
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -45,7 +45,7 @@ export class MyProfileComponent implements OnInit {
         const user = JSON.parse(sessionUser);
         console.log('Parsed user:', user); // Log the parsed user object
 
-        const userId = user._id; // Use _id
+        const userId = user._id; // Use _id from the parsed user object
         console.log('User ID:', userId); // Log the userId
 
         if (userId) {
@@ -53,6 +53,7 @@ export class MyProfileComponent implements OnInit {
           this.employeeService.getEmployeeById(userId).subscribe(
             data => {
               this.employee = data;
+              console.log('Fetched employee data:', this.employee);
               // Populate the form with fetched employee data
               this.profileForm.patchValue({
                 address: this.employee.address,

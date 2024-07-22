@@ -208,7 +208,7 @@ router.get('/:userId', (req, res, next) => {
     mongo(async db => {
       const user = await db.collection('users').findOne(
         { _id: userId },
-        { projection: { _id: 1, firstName: 1, lastName: 1, email: 1, role: 1 } }
+        { projection: { _id: 1, firstName: 1, lastName: 1, email: 1, role: 1, address: 1, phoneNumber: 1 } }
       );
 
       if (!user) {
@@ -226,6 +226,8 @@ router.get('/:userId', (req, res, next) => {
     next(e);
   }
 });
+
+
 
 /**
  * @swagger
