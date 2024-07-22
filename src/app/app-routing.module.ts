@@ -21,6 +21,7 @@ import { MyProfileComponent } from './my-profile/my-profile.component';
 import { authGuard } from './auth.guard';
 import { ServiceRequestComponent } from './service-request/service-request.component';
 import { InvoiceSummaryComponent } from './invoice-summary/invoice-summary.component';
+import { PieComponent } from './pie/pie.component';
 
 const routes: Routes = [
   {
@@ -37,7 +38,8 @@ const routes: Routes = [
       { path: 'faq', component: FaqComponent, title: 'BCRS: FAQ' },
       { path: 'my-profile', component: MyProfileComponent, title: 'BCRS: My Profile', canActivate: [authGuard] },
       { path: 'service-request', component: ServiceRequestComponent, title: 'BCRS: Service Request', canActivate: [authGuard] },
-      { path: 'invoice-summary', component: InvoiceSummaryComponent, title: 'BCRS: Invoice Summary', canActivate: [authGuard] }
+      { path: 'invoice-summary', component: InvoiceSummaryComponent, title: 'BCRS: Invoice Summary', canActivate: [authGuard] },
+      { path: 'service-graph', component: PieComponent, title: 'Purchase By Service Graph'}
     ]
   },
   { path: '**', component: NotFoundPageComponent, title: 'BCRS: 404 Not Found' }
