@@ -2,7 +2,7 @@
  * Title: app.js
  * Author: Professor Krasso and Brock Hemsouvanh
  * Date: 07/03/2024
- * Updated: 07/18/2024 by Brock Hemsouvanh
+ * Updated: 07/21/2024 by Brock Hemsouvanh
  */
 'use strict'
 
@@ -15,9 +15,13 @@ const securityRoutes = require("./routes/security-routes");
 const serviceRoutes = require("./routes/service-routes");
 const swaggerJsdoc = require('swagger-jsdoc');
 const swaggerUi = require('swagger-ui-express');
+const cors = require('cors');
 
 // Create the Express app
 const app = express();
+
+// Configure CORS
+app.use(cors());
 
 // Swagger definition
 const swaggerDefinition = {

@@ -21,7 +21,7 @@ export class AuthService {
    * @returns Observable<boolean> - True if the user is logged in, otherwise false
    */
   isLoggedIn(): Observable<boolean> {
-    // Simulate an API call to check if the user is logged in
+    // Check if the 'session_user' cookie is present
     return of(this.cookieService.check('session_user'));
   }
 
@@ -30,7 +30,7 @@ export class AuthService {
    * @returns Observable<{ fullName: string } | null> - The user's details if logged in, otherwise null
    */
   getUser(): Observable<{ fullName: string } | null> {
-    // Simulate an API call to get user details
+    // Get the 'session_name' cookie value
     const sessionName = this.cookieService.get('session_name');
     return of(sessionName ? { fullName: sessionName } : null);
   }

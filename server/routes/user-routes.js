@@ -24,74 +24,6 @@ const router = express.Router();
 
 /**
  * @swagger
- * components:
- *   schemas:
- *     User:
- *       type: object
- *       required:
- *         - email
- *         - password
- *         - firstName
- *         - lastName
- *         - phoneNumber
- *         - address
- *       properties:
- *         email:
- *           type: string
- *           description: The user's email
- *         password:
- *           type: string
- *           description: The user's password
- *         firstName:
- *           type: string
- *           description: The user's first name
- *         lastName:
- *           type: string
- *           description: The user's last name
- *         phoneNumber:
- *           type: string
- *           description: The user's phone number
- *         address:
- *           type: string
- *           description: The user's address
- *         isDisabled:
- *           type: boolean
- *           description: Whether the user is disabled
- *         role:
- *           type: string
- *           enum: [standard, admin]
- *           description: The user's role
- *         selectedSecurityQuestions:
- *           type: array
- *           items:
- *             type: object
- *             properties:
- *               questionText:
- *                 type: string
- *                 description: The text of the security question
- *               answerText:
- *                 type: string
- *                 description: The answer to the security question
- *       example:
- *         email: "jimbob@bcrs.com"
- *         password: "SecurePassword123"
- *         firstName: "James"
- *         lastName: "Robert"
- *         phoneNumber: "123-456-7890"
- *         address: "456 Tech Lane, Urban City, USA"
- *         isDisabled: false
- *         role: "admin"
- *         selectedSecurityQuestions:
- *           - questionText: "What is your mother's maiden name?"
- *             answerText: "Smith"
- *           - questionText: "What was your first pet's name?"
- *             answerText: "Rover"
- *           - questionText: "What is your favorite color?"
- *             answerText: "Blue"
- */
-
-/**
- * @swagger
  * /api/users:
  *   post:
  *     summary: Create a new user
@@ -117,44 +49,36 @@ const router = express.Router();
  *         description: Internal Server Error
  */
 router.post("/", async (req, res) => {
-  console.log("Let's create a new user!");
+  console.log("Creating a new user...");
   try {
-    console.log(`email: ${req.body.email}`);
-    
-    // Hash the password
-    const hashedPassword = await bcrypt.hash(req.body.password, 10);
+    const { email, password, firstName, lastName, phoneNumber, address, isDisabled, role, selectedSecurityQuestions } = req.body;
+
+    const hashedPassword = await bcrypt.hash(password, 10);
 
     const newUser = {
-      email: req.body.email,
+      email,
       password: hashedPassword,
-      firstName: req.body.firstName,
-      lastName: req.body.lastName,
-      phoneNumber: req.body.phoneNumber,
-      address: req.body.address,
-      isDisabled: req.body.isDisabled || false,
-      role: req.body.role || 'standard',
-      selectedSecurityQuestions: req.body.selectedSecurityQuestions
+      firstName,
+      lastName,
+      phoneNumber,
+      address,
+      isDisabled: isDisabled || false,
+      role: role || 'standard',
+      selectedSecurityQuestions
     };
 
-    mongo(async (db) => {
-      const result = await db.collection("users").insertOne(newUser);
-
-      res.status(201).send({ User: newUser });
+    await mongo(async (db) => {
+      await db.collection("users").insertOne(newUser);
+      res.status(201).send({ user: newUser });
     });
   } catch (e) {
-    console.log(e);
+    console.error(e);
     if (e.name === 'ValidationError') {
-      res.status(400).send({
-        message: `Bad Request: ${e.message}`,
-      });
+      res.status(400).send({ message: `Bad Request: ${e.message}` });
     } else if (e.name === 'NotFoundError') {
-      res.status(404).send({
-        message: `Not Found: ${e.message}`,
-      });
+      res.status(404).send({ message: `Not Found: ${e.message}` });
     } else {
-      res.status(500).send({
-        message: `Internal Server Error: ${e.message}`,
-      });
+      res.status(500).send({ message: `Internal Server Error: ${e.message}` });
     }
   }
 });
@@ -183,33 +107,28 @@ router.post("/", async (req, res) => {
  *         description: Internal Server Error
  */
 router.delete("/:userId", async (req, res) => {
-  console.log("Deleting user...");
+  console.log("Disabling user...");
   try {
-    // Validate the userId parameter
     const userId = req.params.userId;
     if (!ObjectId.isValid(userId)) {
       return res.status(400).send({ message: "Bad Request: Invalid userId" });
     }
 
-    mongo(async (db) => {
-      // "Delete" the user document by setting isDisabled to true
+    await mongo(async (db) => {
       const result = await db.collection("users").updateOne(
         { _id: new ObjectId(userId) },
-        { $set: { isDisabled: true } } // User is not actually deleted, but updated to disabled status.
+        { $set: { isDisabled: true } }
       );
 
       if (result.matchedCount === 0) {
         return res.status(404).send({ message: "Not Found: User not found" });
       }
 
-      // Send a 204 No Content response if the update was successful
       res.status(204).send();
     });
   } catch (e) {
-    console.log(e);
-    res.status(500).send({
-      message: `Internal Server Error: ${e.message}`,
-    });
+    console.error(e);
+    res.status(500).send({ message: `Internal Server Error: ${e.message}` });
   }
 });
 
@@ -219,38 +138,34 @@ router.delete("/:userId", async (req, res) => {
  *  get:
  *    summary: Find all users
  *    tags: [User]
- *    responses: 
- *      200: 
- *         description: Successful
- *         content:
- *           application/json:
- *             schema:
- *               type: array
- *               items:
- *                 $ref: '#/components/schemas/User'
- *      400: 
- *         description: Bad Request
- *      404: 
- *         description: Not Found
- *      500: 
- *         description: Internal Server Error
+ *    responses:
+ *      200:
+ *        description: Successful
+ *        content:
+ *          application/json:
+ *            schema:
+ *              type: array
+ *              items:
+ *                $ref: '#/components/schemas/User'
+ *      400:
+ *        description: Bad Request
+ *      404:
+ *        description: Not Found
+ *      500:
+ *        description: Internal Server Error
  */
 router.get('/users', (req, res, next) => {
   try {
     mongo(async db => {
-      const users = await db.collection('users').find(
-        {},
-        { projection: { userId: 1, firstName: 1, lastName: 1, email: 1, role: 1 } },
-      )
-      .sort({ userId: 1}) // sorts the results by userId ascending (1) or descending (-1)
-      .toArray(); // convert the results to an array
+      const users = await db.collection('users').find({}, { projection: { userId: 1, firstName: 1, lastName: 1, email: 1, role: 1 } })
+        .sort({ userId: 1 })
+        .toArray();
 
-      console.log('users', users);
-
+      console.log('Users retrieved:', users);
       res.send(users);
     }, next);
   } catch (err) {
-    console.log('err', err);
+    console.error(err);
     next(err);
   }
 });
@@ -266,39 +181,40 @@ router.get('/users', (req, res, next) => {
  *        in: path
  *        required: true
  *        description: ID of user to retrieve
- *        schema: 
+ *        schema:
  *          type: string
- *    responses: 
- *      200: 
- *         description: User successfully found
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/User'
+ *    responses:
+ *      200:
+ *        description: User successfully found
+ *        content:
+ *          application/json:
+ *            schema:
+ *              $ref: '#/components/schemas/User'
  *      400:
- *         description: Bad Request
- *      404: 
- *         description: Not Found
- *      500: 
- *         description: Internal Server Error
+ *        description: Bad Request
+ *      404:
+ *        description: Not Found
+ *      500:
+ *        description: Internal Server Error
  */
 router.get('/:userId', (req, res, next) => {
   try {
-    let { userId } = req.params; // user Id
+    let { userId } = req.params;
+    if (!ObjectId.isValid(userId)) {
+      return res.status(400).send({ message: "Invalid userId" });
+    }
     userId = new ObjectId(userId);
 
     mongo(async db => {
-      // find user by userId
       const user = await db.collection('users').findOne(
-        { _id: userId }, 
-        { projection: { userId: 1, firstName: 1, lastName: 1, email: 1, role: 1 } },
+        { _id: userId },
+        { projection: { userId: 1, firstName: 1, lastName: 1, email: 1, role: 1 } }
       );
 
       if (!user) {
-        // if the user is not found
         const err = new Error('Unable to find user with userId ' + userId);
         err.status = 404;
-        console.log('err', err);
+        console.error('Error:', err);
         next(err);
         return;
       }
@@ -306,7 +222,7 @@ router.get('/:userId', (req, res, next) => {
       res.send(user);
     }, next);
   } catch (e) {
-    console.log(e);
+    console.error(e);
     next(e);
   }
 });
@@ -345,14 +261,15 @@ router.get('/:userId', (req, res, next) => {
  *         description: Bad Request
  *       404:
  *         description: User not found
- *       500: 
+ *       500:
  *         description: Internal Server Error
- *       501: 
- *         description: Database Error
  */
 router.put('/:userId', (req, res, next) => {
   try {
     let { userId } = req.params;
+    if (!ObjectId.isValid(userId)) {
+      return res.status(400).send({ message: "Invalid userId" });
+    }
     userId = new ObjectId(userId);
 
     mongo(async db => {
@@ -364,7 +281,7 @@ router.put('/:userId', (req, res, next) => {
       if (result.matchedCount === 0) {
         const err = new Error('Unable to find user with userId ' + userId);
         err.status = 404;
-        console.log('err', err);
+        console.error('Error:', err);
         next(err);
         return;
       }
@@ -372,7 +289,7 @@ router.put('/:userId', (req, res, next) => {
       res.status(204).send();
     }, next);
   } catch (err) {
-    console.log('err', err);
+    console.error(err);
     next(err);
   }
 });
@@ -404,8 +321,8 @@ router.get('/profile/:email', async (req, res) => {
   try {
     const email = req.params.email;
 
-    mongo(async (db) => {
-      const user = await db.collection('users').findOne({ email: email });
+    await mongo(async (db) => {
+      const user = await db.collection('users').findOne({ email });
 
       if (!user) {
         return res.status(404).send({ message: 'User not found' });
@@ -414,10 +331,8 @@ router.get('/profile/:email', async (req, res) => {
       res.status(200).send(user);
     });
   } catch (e) {
-    console.log(e);
-    res.status(500).send({
-      message: `Internal Server Error: ${e.message}`,
-    });
+    console.error(e);
+    res.status(500).send({ message: `Internal Server Error: ${e.message}` });
   }
 });
 
@@ -460,9 +375,9 @@ router.put('/profile/:email/update-profile', async (req, res) => {
     const email = req.params.email;
     const updateData = req.body;
 
-    mongo(async (db) => {
+    await mongo(async (db) => {
       const result = await db.collection('users').updateOne(
-        { email: email },
+        { email },
         { $set: updateData }
       );
 
@@ -473,10 +388,8 @@ router.put('/profile/:email/update-profile', async (req, res) => {
       res.status(204).send();
     });
   } catch (e) {
-    console.log(e);
-    res.status(500).send({
-      message: `Internal Server Error: ${e.message}`,
-    });
+    console.error(e);
+    res.status(500).send({ message: `Internal Server Error: ${e.message}` });
   }
 });
 
@@ -515,43 +428,31 @@ router.put('/profile/:email/update-profile', async (req, res) => {
  */
 router.post('/signin', (req, res, next) => {
   try {
-
     console.log("User signing in...");
-    // Get the email address and password from the request body
     const signIn = req.body;
 
-    // Validate the sign in data against the signInSchema
     const validate = ajv.compile(signInSchema);
     const valid = validate(signIn);
 
-    // If the signIn object is not valid; then return a 400 status code with message 'Bad request'
-    if(!valid) {
+    if (!valid) {
       console.error('Error validating the signIn data with the signInSchema!');
-      console.log('signIn validation error: ', validate.errors);
       return next(createError(400, `Bad request: ${validate.errors}`));
     }
 
-    // Call mongo and log in user
     mongo(async db => {
       console.log("Looking up the user...");
-      // Find the user
-      const user = await db.collection("users").findOne({
-        email: signIn.email
-      });
+      const user = await db.collection("users").findOne({ email: signIn.email });
 
-      // If the user is found; Then compare password passed in from the body with the password in the database
       if (user) {
         console.log("User found!");
         console.log("Comparing passwords...");
-        // Compare the password
-        let passwordIsValid = bcrypt.compareSync(signIn.password, user.password);
+        const passwordIsValid = bcrypt.compareSync(signIn.password, user.password);
 
-        // Else if the password doesn't match; then return status code 400 with message "Invalid credentials"
         if (!passwordIsValid) {
           console.error('Invalid password!');
           return next(createError(401, "Unauthorized"));
         }
-        // If the password matches; then return status code 200 with message "User sign in"
+
         console.log("Password matches!");
         res.send(user);
       } else {
@@ -559,10 +460,8 @@ router.post('/signin', (req, res, next) => {
         return next(createError(404, "User not found"));
       }
     }, next);
-
-    // Catch any Database errors
   } catch (err) {
-    console.error("Error: ", err);
+    console.error("Error:", err);
     next(err);
   }
 });

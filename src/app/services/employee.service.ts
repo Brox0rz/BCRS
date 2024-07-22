@@ -2,7 +2,7 @@
  * Title: employee.service.ts
  * Author: Brock Hemsouvanh
  * Date: 07/18/2024
- * Updated: 07/19/2024 by Brock Hemsouvanh
+ * Updated: 07/21/2024 by Brock Hemsouvanh
  * Description: Service for handling employee-related API requests
  */
 
