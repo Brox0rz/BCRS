@@ -20,11 +20,11 @@ export class EmployeeService {
 
   /**
    * Method to get employee details by ID
-   * @param employeeId - The ID of the employee
+   * @param userId - The ID of the employee
    * @returns Observable<any> - The employee details
    */
-  getEmployeeById(employeeId: string): Observable<any> {
-    return this.http.get(`${this.apiUrl}/${employeeId}`);
+  getEmployeeById(userId: string): Observable<any> {
+    return this.http.get(`${this.apiUrl}/${userId}`);
   }
 
   /**

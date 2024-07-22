@@ -8,7 +8,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { SecurityComponent } from './security.component';
-import { SigninComponent } from './signin/signin.component';
+import { SigninComponent } from '../signin/signin.component';
 import { RoleGuard } from './guards/role.guard'; // Importing RoleGuard
 import { RegisterComponent } from './register/register.component'; 
 // Defining routes for the security module

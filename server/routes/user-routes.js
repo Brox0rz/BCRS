@@ -157,8 +157,8 @@ router.delete("/:userId", async (req, res) => {
 router.get('/users', (req, res, next) => {
   try {
     mongo(async db => {
-      const users = await db.collection('users').find({}, { projection: { userId: 1, firstName: 1, lastName: 1, email: 1, role: 1 } })
-        .sort({ userId: 1 })
+      const users = await db.collection('users').find({}, { projection: { _id: 1, firstName: 1, lastName: 1, email: 1, role: 1 } })
+        .sort({ _id: 1 })
         .toArray();
 
       console.log('Users retrieved:', users);
@@ -208,7 +208,7 @@ router.get('/:userId', (req, res, next) => {
     mongo(async db => {
       const user = await db.collection('users').findOne(
         { _id: userId },
-        { projection: { userId: 1, firstName: 1, lastName: 1, email: 1, role: 1 } }
+        { projection: { _id: 1, firstName: 1, lastName: 1, email: 1, role: 1 } }
       );
 
       if (!user) {

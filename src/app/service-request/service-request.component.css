@@ -1,0 +1,17 @@
+.text-color {
+  color: #0F1D4A; /* Dark Blue */
+}
+
+th, .btn-color {
+  background-color: #0F1D4A; /* Dark Blue */
+  color: #fff;
+}
+
+.btn-size{
+  width: 25%;
+}
+
+/* Align the checkboxes to the right */
+.align-right {
+  text-align: right;
+}

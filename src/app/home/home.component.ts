@@ -1,8 +1,9 @@
 /**
  * Title: home.component.ts
- * Author: Brock Hemsouvanh
- * Date: 07/21/2024
- * Description: Home component logic for BCRS application
+ * Author: Professor Krasso
+ * Date: 8/5/23
+ * Updated: 7/21/2024 by Brock Hemsouvanh
+ *  * Description: Home component logic for BCRS application
  */
 
 import { Component, OnInit } from '@angular/core';

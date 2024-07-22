@@ -2,16 +2,15 @@
  * Title: nav.component.ts
  * Author: Professor Krasso and Brock Hemsouvanh
  * Date: 8/5/23
- * Updated: 07/19/2024 by Brock Hemsouvanh
+ * Updated: 07/21/2024 by Brock Hemsouvanh
  */
 
-// Import statements
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import { CookieService } from 'ngx-cookie-service';
 import { AuthService } from '../../services/auth.service';
+import { Subscription } from 'rxjs';
 
-// AppUser interface with fullName property
 export interface AppUser {
   fullName: string;
 }
@@ -21,39 +20,52 @@ export interface AppUser {
   templateUrl: './nav.component.html',
   styleUrls: ['./nav.component.css']
 })
-export class NavComponent implements OnInit {
+export class NavComponent implements OnInit, OnDestroy {
   appUser: AppUser | null = null;
   isSignedIn: boolean = false;
+  private authSubscription: Subscription | undefined;
 
-  // Constructor with cookieService, router, and authService dependencies
   constructor(private cookieService: CookieService, private router: Router, private authService: AuthService) {}
 
   ngOnInit(): void {
-    this.authService.isLoggedIn().subscribe((loggedIn) => {
+    this.authSubscription = this.authService.isLoggedIn().subscribe((loggedIn) => {
       this.isSignedIn = loggedIn;
+      console.log('Is Signed In:', this.isSignedIn);
       this.setUserDetails();
     });
   }
 
-  // Set the appUser object if the user is signed in
-  setUserDetails(): void {
-    if (this.isSignedIn) {
-      const sessionUser = this.cookieService.get('session_user');
-      const sessionName = this.cookieService.get('session_name');
-      
-      if (sessionUser && sessionName) {
-        this.appUser = { fullName: sessionName };
-        console.log('Signed in as', this.appUser.fullName);
-      }
+  ngOnDestroy(): void {
+    if (this.authSubscription) {
+      this.authSubscription.unsubscribe();
     }
   }
 
-  // Signout function to clear the session cookie
+  setUserDetails(): void {
+    if (this.isSignedIn) {
+      const sessionUser = this.cookieService.get('session_user');
+      if (sessionUser) {
+        const user = JSON.parse(sessionUser);
+        this.appUser = { fullName: user.firstName + ' ' + user.lastName };
+        console.log('Signed in as', this.appUser.fullName);
+      } else {
+        console.log('No session user found in cookies.');
+      }
+    } else {
+      this.appUser = null;
+      console.log('User is not signed in.');
+    }
+  }
+
   signout(): void {
     console.log('Clearing cookies');
-    // Delete all cookies
-    this.cookieService.deleteAll();
-    // Redirect to the home page
+    this.authService.logoutUser(); // Use AuthService to log out the user
+    this.isSignedIn = false;
+    this.appUser = null;
     this.router.navigate(['/']);
+  }
+
+  logDropdownToggle(): void {
+    console.log('Dropdown toggle clicked');
   }
 }

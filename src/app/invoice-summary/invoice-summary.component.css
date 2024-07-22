@@ -1,0 +1,16 @@
+.text-color {
+  color: #0F1D4A; /* Dark Blue */
+}
+
+.btn-color {
+  background-color: #0F1D4A; /* Dark Blue */
+  color: #fff;
+}
+
+.btn-size{
+  width: 25%;
+}
+
+.pl-3 {
+  padding-left: 10px;
+}

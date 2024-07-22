@@ -4,7 +4,7 @@
  * Date: 10/2023
  * Updated: 7/19/2024 by Brock Hemsouvanh
  */
-// register.component.ts
+
 import { Component, OnInit } from '@angular/core';
 import { SecurityService } from 'src/app/security.service';
 import { Router } from '@angular/router'; 

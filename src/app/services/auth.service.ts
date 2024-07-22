@@ -2,36 +2,61 @@
  * Title: auth.service.ts
  * Author: Brock Hemsouvanh
  * Date: 07/19/2024
- * Updated: 07/19/2024 by Brock Hemsouvanh
+ * Updated: 07/21/2024 by Brock Hemsouvanh
  * Description: Service for handling authorization and authentication API requests
  */
 
+'use strict';
+
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { Observable, BehaviorSubject } from 'rxjs';
 import { CookieService } from 'ngx-cookie-service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  constructor(private cookieService: CookieService) {}
+  private isLoggedInSubject: BehaviorSubject<boolean>;
+  private userSubject: BehaviorSubject<{ fullName: string } | null>;
 
-  /**
-   * Method to check if the user is logged in
-   * @returns Observable<boolean> - True if the user is logged in, otherwise false
-   */
-  isLoggedIn(): Observable<boolean> {
-    // Check if the 'session_user' cookie is present
-    return of(this.cookieService.check('session_user'));
+  constructor(private cookieService: CookieService) {
+    this.isLoggedInSubject = new BehaviorSubject<boolean>(this.cookieService.check('session_user'));
+    const sessionUser = this.cookieService.get('session_user');
+    const user = sessionUser ? JSON.parse(sessionUser) : null;
+    this.userSubject = new BehaviorSubject<{ fullName: string } | null>(
+      user ? { fullName: `${user.firstName} ${user.lastName}` } : null
+    );
   }
 
-  /**
-   * Method to get the logged-in user's details
-   * @returns Observable<{ fullName: string } | null> - The user's details if logged in, otherwise null
-   */
+  isLoggedIn(): Observable<boolean> {
+    return this.isLoggedInSubject.asObservable();
+  }
+
   getUser(): Observable<{ fullName: string } | null> {
-    // Get the 'session_name' cookie value
-    const sessionName = this.cookieService.get('session_name');
-    return of(sessionName ? { fullName: sessionName } : null);
+    return this.userSubject.asObservable();
+  }
+
+  loginUser(user: any): void {
+    const sessionCookie = {
+      _id: user._id,
+      userId: user.userId,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      email: user.email,
+      phoneNumber: user.phoneNumber,
+      address: user.address,
+      isDisabled: user.isDisabled,
+      role: user.role,
+      selectedSecurityQuestions: user.selectedSecurityQuestions
+    };
+    this.cookieService.set('session_user', JSON.stringify(sessionCookie), 1);
+    this.isLoggedInSubject.next(true);
+    this.userSubject.next({ fullName: `${user.firstName} ${user.lastName}` });
+  }
+
+  logoutUser(): void {
+    this.cookieService.deleteAll();
+    this.isLoggedInSubject.next(false);
+    this.userSubject.next(null);
   }
 }
