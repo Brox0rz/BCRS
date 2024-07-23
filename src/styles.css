@@ -9,10 +9,18 @@ body, html {
   padding: 0;
   font-family: "Montserrat", sans-serif !important;
   background-color: #5d5d5d !important;
+  height: 100%;
 }
 
-/* Add margin to main content to prevent overlap with navbar */
+/* Flexbox layout for full height pages */
+:host {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
 main {
+  flex: 1;
   margin-top: 150px; /* Adjust this value based on the height of the navbar */
 }
 
@@ -242,4 +250,15 @@ input {
   border-radius: 5px ;
   border: 5px 5px #000;
   padding: 6px;
+}
+
+/* Footer styles */
+footer {
+  background-color: #0f1d4a;
+  color: #fff;
+  text-align: center;
+  padding: 1rem 0;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
 }
