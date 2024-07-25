@@ -6,10 +6,16 @@
   Description: HTML template for the Sign In Component
 -->
 
+
+<br>
+<br>
+<br>
+<br>
 <div class="login-container">
   <div class="login-card">
     <h2 class="login-title text-center fw-bold">User Sign In</h2>
     <hr>
+    <br>
     <!-- Form for user sign in -->
     <form [formGroup]="signinForm" (ngSubmit)="signIn()">
       <div class="alert alert-danger" *ngIf="errMessage">
@@ -60,7 +66,7 @@
 
       <!-- button submit -->
       <div class="text-center mt-4">
-        <button type="submit" class="btn btn-primary" [disabled]="signinForm.invalid">Sign In</button>
+        <button type="submit" class="btn bg-dark-blue btn-lg" [disabled]="signinForm.invalid">Sign In</button>
       </div>
 
       <!-- Sign In -->

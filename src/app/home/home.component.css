@@ -29,6 +29,7 @@ p {
 
 .homepage-image-card {
   min-height: 800px;
+  margin-bottom: 100px;
 }
 
 .card img {

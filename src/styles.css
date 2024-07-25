@@ -9,7 +9,10 @@ body, html {
   padding: 0;
   font-family: "Montserrat", sans-serif !important;
   background-color: #5d5d5d !important;
-  height: 100%;
+  min-height: 100vh;
+  
+    display: flex;
+    flex-direction: column; 
 }
 
 /* Flexbox layout for full height pages */
@@ -252,13 +255,3 @@ input {
   padding: 6px;
 }
 
-/* Footer styles */
-footer {
-  background-color: #0f1d4a;
-  color: #fff;
-  text-align: center;
-  padding: 1rem 0;
-  position: fixed;
-  bottom: 0;
-  width: 100%;
-}

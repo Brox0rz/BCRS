@@ -3,15 +3,25 @@
 }
 
 th, .btn-color {
-  background-color: #0F1D4A; /* Dark Blue */
+  background-color: #0F1D4A !important; /* Dark Blue */
   color: #fff;
 }
 
-.btn-size{
-  width: 25%;
+.btn-size {
+  width: 100%;
 }
 
 /* Align the checkboxes to the right */
 .align-right {
   text-align: right;
+}
+
+.card-size {
+  width: 60%;
+  padding: 100px;
+}
+
+.card-background {
+  background-color: #474a56 !important;
+  color: #fff;
 }
