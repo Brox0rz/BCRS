@@ -9,13 +9,17 @@
 
 const express = require('express');
 const router = express.Router();
-const userRoute = require('./user-routes');
+const userRoutes = require('./user-routes');
 const securityRoutes = require('./security-routes');
+const serviceRoutes = require('./service-routes');
 
 // Use user routes
 router.use('/users', userRoutes);
 
 // Use security routes
 router.use('/security', securityRoutes);
+
+// Use service routes
+router.use('/services', serviceRoutes);
 
 module.exports = router;

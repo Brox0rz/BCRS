@@ -1,0 +1,33 @@
+/* Styles for user management cards */
+.user-management-card {
+  width: 85%;
+  margin: 0 auto;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+}
+
+.user-management-card .card-body {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.user-management-card .card-title {
+  margin: 0;
+  font-size: 1.2em;
+}
+
+.user-management-card .card-text {
+  margin: 0;
+  color: #555;
+}
+
+.user-management-card button {
+  margin-left: 10px;
+}

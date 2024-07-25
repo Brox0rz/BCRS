@@ -10,17 +10,64 @@
  * 
  */
 
-"use strict";
+'use strict';
 
-const express = require("express");
+const express = require('express');
 const bcrypt = require('bcrypt');
-const { mongo } = require("../utils/mongo");
-const createError = require("http-errors");
+const { mongo } = require('../utils/mongo');
+const createError = require('http-errors');
 const { ObjectId } = require('mongodb');
 const Ajv = require('ajv');
-const ajv = new Ajv(); // create a new instance of the Ajv object from the npm package
+const ajv = new Ajv();
 
 const router = express.Router();
+
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     User:
+ *       type: object
+ *       properties:
+ *         _id:
+ *           type: string
+ *           description: The user ID
+ *         email:
+ *           type: string
+ *           description: The user's email
+ *         password:
+ *           type: string
+ *           description: The user's password
+ *         firstName:
+ *           type: string
+ *           description: The user's first name
+ *         lastName:
+ *           type: string
+ *           description: The user's last name
+ *         phoneNumber:
+ *           type: string
+ *           description: The user's phone number
+ *         address:
+ *           type: string
+ *           description: The user's address
+ *         isDisabled:
+ *           type: boolean
+ *           description: Indicates if the user is disabled
+ *         role:
+ *           type: string
+ *           description: The user's role
+ *         selectedSecurityQuestions:
+ *           type: array
+ *           items:
+ *             type: object
+ *             properties:
+ *               questionText:
+ *                 type: string
+ *                 description: The text of the security question
+ *               answerText:
+ *                 type: string
+ *                 description: The answer to the security question
+ */
 
 /**
  * @swagger
@@ -135,34 +182,35 @@ router.delete("/:userId", async (req, res) => {
 /**
  * @swagger
  * /api/users:
- *  get:
- *    summary: Find all users
- *    tags: [User]
- *    responses:
- *      200:
- *        description: Successful
- *        content:
- *          application/json:
- *            schema:
- *              type: array
- *              items:
- *                $ref: '#/components/schemas/User'
- *      400:
- *        description: Bad Request
- *      404:
- *        description: Not Found
- *      500:
- *        description: Internal Server Error
+ *   get:
+ *     summary: Find all users
+ *     tags: [User]
+ *     responses:
+ *       200:
+ *         description: Successful
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/User'
+ *       400:
+ *         description: Bad Request
+ *       404:
+ *         description: Not Found
+ *       500:
+ *         description: Internal Server Error
  */
-router.get('/users', (req, res, next) => {
+router.get('/', (req, res, next) => {
+  console.log('Fetching all users...');
   try {
     mongo(async db => {
-      const users = await db.collection('users').find({}, { projection: { _id: 1, firstName: 1, lastName: 1, email: 1, role: 1 } })
+      const users = await db.collection('users').find({}, { projection: { _id: 1, firstName: 1, lastName: 1, email: 1, password: 1, phoneNumber: 1, address: 1, isDisabled: 1, role: 1, selectedSecurityQuestions: 1 } })
         .sort({ _id: 1 })
         .toArray();
 
       console.log('Users retrieved:', users);
-      res.send(users);
+      res.json(users);
     }, next);
   } catch (err) {
     console.error(err);
@@ -226,8 +274,6 @@ router.get('/:userId', (req, res, next) => {
     next(e);
   }
 });
-
-
 
 /**
  * @swagger

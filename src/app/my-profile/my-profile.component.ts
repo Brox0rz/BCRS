@@ -2,7 +2,7 @@
  * Title: my-profile.component.ts
  * Author: Professor Richard Krasso and Brock Hemsouvanh
  * Date: 07/18/2024
- * Updated: 07/21/2024 by Brock Hemsouvanh
+ * Updated: 07/24/2024 by Brock Hemsouvanh
  * Description: Component for managing the user's profile
  */
 

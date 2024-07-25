@@ -46,4 +46,21 @@ export class EmployeeService {
   getEmployeeByEmail(email: string): Observable<any> {
     return this.http.get(`${this.apiUrl}/profile/${email}`);
   }
+
+  /**
+   * Method to get all users
+   * @returns Observable<any[]> - The array of users
+   */
+  getAllUsers(): Observable<any[]> {
+    return this.http.get<any[]>(this.apiUrl);
+  }
+
+  /**
+   * Method to delete a user by ID
+   * @param userId - The ID of the user to delete
+   * @returns Observable<any> - The response from the API
+   */
+  deleteUser(userId: string): Observable<any> {
+    return this.http.delete(`${this.apiUrl}/${userId}`);
+  }
 }

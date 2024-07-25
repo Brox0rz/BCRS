@@ -59,22 +59,21 @@
         <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false" (click)="logDropdownToggle()">
           <span class="material-icons">person</span>
         </a>
-        <span class="greeting-message">Hello, {{ appUser?.fullName }}</span>
         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
           <li class="dropdown-item profileName">
             Signed in as {{ appUser?.fullName }}
           </li>
-          <li class="dropdown-item role">User Role</li>
-          <hr />
+          <li class="dropdown-item role">{{ appUser?.role === 'admin' ? 'Admin' : 'Standard User' }}</li>
           <li class="dropdown-item">
             <a routerLink="/my-profile" class="dropdown-item menuItem">My Profile</a>
           </li>
-          <li class="dropdown-item">
-            <a routerLink="/user-configuration" class="dropdown-item menuItem">User Configuration</a>
+          <li class="dropdown-item" *ngIf="appUser?.role === 'admin'">
+            <a routerLink="/user-management" class="dropdown-item menuItem">User Management</a>
           </li>
-          <li class="dropdown-item">
-            <a routerLink="/purchases-by-service" class="dropdown-item menuItem">Purchases By Service</a>
+          <li class="dropdown-item" *ngIf="appUser?.role === 'admin'">
+            <a routerLink="/service-history-graph" class="dropdown-item menuItem">Service History Graph</a>
           </li>
+          <hr />
           <li class="dropdown-item">
             <a (click)="signout()" class="dropdown-item menuItem">Log Out</a>
           </li>

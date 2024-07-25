@@ -2,8 +2,10 @@
  * Title: app.module.ts
  * Author: Professor Krasso and Brock Hemsouvanh
  * Date: 8/5/23
- * Updated: 07/20/2024 by Brock Hemsouvanh and Mackenzie Lubben-Ortiz
+ * Updated: 07/24/2024 by Brock Hemsouvanh and Mackenzie Lubben-Ortiz
  */
+
+'use strict';
 
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
@@ -30,6 +32,7 @@ import { AuthService } from './services/auth.service';
 import { SecurityModule } from './security/security.module';
 import { ServiceRequestComponent } from './service-request/service-request.component';
 import { InvoiceSummaryComponent } from './invoice-summary/invoice-summary.component';
+import { UserManagementComponent } from './user-management/user-management.component';
 
 @NgModule({
   declarations: [
@@ -47,6 +50,7 @@ import { InvoiceSummaryComponent } from './invoice-summary/invoice-summary.compo
     PieComponent,
     ServiceRequestComponent,
     InvoiceSummaryComponent,
+    UserManagementComponent,
   ],
   imports: [
     BrowserModule,
