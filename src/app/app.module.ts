@@ -2,7 +2,7 @@
  * Title: app.module.ts
  * Author: Professor Krasso and Brock Hemsouvanh
  * Date: 8/5/23
- * Updated: 07/24/2024 by Brock Hemsouvanh and Mackenzie Lubben-Ortiz
+ * Updated: 07/26/2024 by Brock Hemsouvanh and Mackenzie Lubben-Ortiz
  */
 
 'use strict';
@@ -33,6 +33,7 @@ import { SecurityModule } from './security/security.module';
 import { ServiceRequestComponent } from './service-request/service-request.component';
 import { InvoiceSummaryComponent } from './invoice-summary/invoice-summary.component';
 import { UserManagementComponent } from './user-management/user-management.component';
+import { InvoiceService } from './services/invoice.service';
 
 @NgModule({
   declarations: [
@@ -64,6 +65,7 @@ import { UserManagementComponent } from './user-management/user-management.compo
     CookieService,
     EmployeeService,
     AuthService,
+    InvoiceService,
   ],
   bootstrap: [AppComponent],
 })

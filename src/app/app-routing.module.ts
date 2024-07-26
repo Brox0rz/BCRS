@@ -44,7 +44,7 @@ const routes: Routes = [
       { path: 'service-request', component: ServiceRequestComponent, title: 'BCRS: Service Request', canActivate: [authGuard] },
       { path: 'invoice-summary', component: InvoiceSummaryComponent, title: 'BCRS: Invoice Summary', canActivate: [authGuard] },
       { path: 'user-management', component: UserManagementComponent, title: 'BCRS: User Management', canActivate: [authGuard, roleGuard] },
-      { path: 'service-graph', component: PieComponent, title: 'Purchase By Service Graph'}
+      { path: 'service-history-graph', component: PieComponent, title: 'Service History'}
     ]
   },
   { path: '**', component: NotFoundPageComponent, title: 'BCRS: 404 Not Found' }

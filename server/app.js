@@ -2,7 +2,7 @@
  * Title: app.js
  * Author: Professor Krasso and Brock Hemsouvanh
  * Date: 07/03/2024
- * Updated: 07/24/2024 by Brock Hemsouvanh
+ * Updated: 07/26/2024 by Brock Hemsouvanh
  */
 'use strict';
 
@@ -10,10 +10,13 @@
 const express = require('express');
 const createError = require('http-errors');
 const path = require('path');
-const routes = require("./routes/index"); // Aggregated routes
 const swaggerJsdoc = require('swagger-jsdoc');
 const swaggerUi = require('swagger-ui-express');
 const cors = require('cors');
+
+// Import route files
+const indexRoutes = require('./routes/index');
+const serviceRoutes = require('./routes/service-routes'); // Service routes
 
 // Create the Express app
 const app = express();
@@ -52,7 +55,8 @@ app.use(express.json()); // Middleware to parse JSON bodies
 app.use(express.urlencoded({ extended: true })); // Middleware to parse URL-encoded bodies
 
 // API routes
-app.use('/api', routes); // Use the aggregated routes
+app.use('/api', indexRoutes); // Use the aggregated routes (if you have one)
+app.use('/api/invoices', serviceRoutes); // Use the service routes
 
 // Swagger setup
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec)); // Serve the Swagger API docs
