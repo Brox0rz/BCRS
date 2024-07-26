@@ -10,9 +10,8 @@ body, html {
   font-family: "Montserrat", sans-serif !important;
   background-color: #5d5d5d !important;
   min-height: 100vh;
-  
-    display: flex;
-    flex-direction: column; 
+  display: flex;
+  flex-direction: column; 
 }
 
 /* Flexbox layout for full height pages */
@@ -255,3 +254,17 @@ input {
   padding: 6px;
 }
 
+.form-floating {
+  position: relative;
+}
+
+.form-floating > input,
+.form-floating > label {
+  padding: 1rem;
+}
+
+.form-floating > input:focus ~ label,
+.form-floating > input:not(:placeholder-shown) ~ label {
+  transform: translateY(-1.5rem) scale(.85);
+  color: #495057;
+}

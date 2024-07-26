@@ -2,49 +2,43 @@
  * Title: role.guard.ts
  * Author: Brock Hemsouvanh
  * Date: 07/06/2024
+ * Updated: 07/25/24 by Brock Hemsouvanh
  * 
  * This code was developed with reference to the Angular documentation on Injectables:
  * https://v17.angular.io/api/core/Injectable
  * 
  * Description: 
- * RoleGuard service to protect routes based on user roles.
+ * roleGuard service to protect routes based on user roles.
  */
 
-import { Injectable } from '@angular/core';
-import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, Router } from '@angular/router';
+'use strict';
+
+import { inject } from '@angular/core';
+import { CanActivateFn, Router } from '@angular/router';
 import { CookieService } from 'ngx-cookie-service';
 
 /**
- * RoleGuard service to protect routes based on user roles.
+ * roleGuard service to protect routes based on user roles.
  */
-@Injectable({
-  providedIn: 'root'
-})
-export class RoleGuard implements CanActivate {
+export const roleGuard: CanActivateFn = (route, state) => {
+  const router = inject(Router);
+  const cookieService = inject(CookieService);
+  const userRole = cookieService.get('role');
+  
+  console.log('roleGuard - Retrieved role from cookie:', userRole, 'for route:', route.routeConfig?.path); // Log the user role and route
 
-  /**
-   * Constructor to inject dependencies.
-   * @param router - Router to navigate if the user is not authorized.
-   * @param cookieService - Service to handle cookies.
-   */
-  constructor(private router: Router, private cookieService: CookieService) { }
-
-  /**
-   * Method to check if the route can be activated based on user role.
-   * @param route - The activated route snapshot.
-   * @param state - The router state snapshot.
-   * @returns boolean - Returns true if the user has the 'admin' role, otherwise navigates to 'not-authorized' page and returns false.
-   */
-  canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
-    // Get the user role from the cookies.
-    const userRole = this.cookieService.get('role');
-
-    // Check if the user role is 'admin'.
-    if (userRole && userRole === 'admin') {
+  if (userRole) {
+    console.log('roleGuard - User role is defined:', userRole);
+    if (userRole === 'admin') {
+      console.log('roleGuard: Access granted to route:', route.routeConfig?.path);
       return true; // Allow access to the route.
     } else {
-      this.router.navigate(['/not-authorized']); // Navigate to 'not-authorized' page if the user is not an admin.
-      return false; // Deny access to the route.
+      console.log('roleGuard: User role is not admin. Access denied.');
     }
+  } else {
+    console.log('roleGuard: No role found in cookies. Access denied.');
   }
-}
+
+  router.navigate(['/not-authorized']); // Navigate to 'not-authorized' page if the user is not an admin.
+  return false; // Deny access to the route.
+};

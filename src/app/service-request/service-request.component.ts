@@ -18,9 +18,10 @@ export class ServiceRequestComponent implements OnInit {
 
   constructor(private fb: FormBuilder) {
     this.serviceRequestForm = this.fb.group({
-      orderDate: ['', Validators.required],
-      customerFullName: ['', Validators.required],
+      customerFirstName: ['', Validators.required],
+      customerLastName: ['', Validators.required],
       customerEmail: ['', [Validators.required, Validators.email]],
+      orderDate: ['', Validators.required],
       partsAmount: [0, Validators.min(0)],
       laborAmount: [0, Validators.min(0)]
     });
