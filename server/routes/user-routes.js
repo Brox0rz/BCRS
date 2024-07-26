@@ -320,10 +320,12 @@ router.put('/:userId', (req, res, next) => {
     }
     userId = new ObjectId(userId);
 
+    const { _id, ...updateData } = req.body; // Exclude _id from the update payload
+
     mongo(async db => {
       const result = await db.collection('users').updateOne(
         { _id: userId },
-        { $set: req.body }
+        { $set: updateData }
       );
 
       if (result.matchedCount === 0) {
@@ -341,6 +343,8 @@ router.put('/:userId', (req, res, next) => {
     next(err);
   }
 });
+
+
 
 /**
  * @swagger

@@ -2,13 +2,14 @@
  * Title: employee.service.ts
  * Author: Brock Hemsouvanh
  * Date: 07/18/2024
- * Updated: 07/21/2024 by Brock Hemsouvanh
+ * Updated: 07/25/2024 by Brock Hemsouvanh
  * Description: Service for handling employee-related API requests
  */
 
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { User } from '../models/user.model';
 
 @Injectable({
   providedIn: 'root'
@@ -28,14 +29,13 @@ export class EmployeeService {
   }
 
   /**
-   * Method to update employee profile details by email
-   * @param email - The email of the employee
-   * @param address - The new address of the employee
-   * @param phoneNumber - The new phone number of the employee
+   * Method to update employee profile details
+   * @param user - The user object with updated details
    * @returns Observable<any> - The response from the API
    */
-  updateEmployeeProfile(email: string, address: string, phoneNumber: string): Observable<any> {
-    return this.http.put(`${this.apiUrl}/profile/${email}/update-profile`, { address, phoneNumber });
+  updateEmployeeProfile(user: User): Observable<any> {
+    const { _id, ...updateData } = user; // Exclude _id from the update payload
+    return this.http.put(`${this.apiUrl}/${_id}`, updateData);
   }
 
   /**

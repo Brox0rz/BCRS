@@ -2,7 +2,7 @@
  * Title: auth.service.ts
  * Author: Brock Hemsouvanh
  * Date: 07/19/2024
- * Updated: 07/21/2024 by Brock Hemsouvanh
+ * Updated: 07/25/2024 by Brock Hemsouvanh
  * Description: Service for handling authorization and authentication API requests
  */
 
@@ -42,21 +42,26 @@ export class AuthService {
       userId: user.userId,
       firstName: user.firstName,
       lastName: user.lastName,
-      email: user.email,
-      phoneNumber: user.phoneNumber,
-      address: user.address,
-      isDisabled: user.isDisabled,
-      role: user.role,
-      selectedSecurityQuestions: user.selectedSecurityQuestions
+      role: user.role
     };
     this.cookieService.set('session_user', JSON.stringify(sessionCookie), 1);
+    this.cookieService.set('role', user.role, 1); // Added this line to set the role separately
     this.isLoggedInSubject.next(true);
     this.userSubject.next({ fullName: `${user.firstName} ${user.lastName}` });
+
+    console.log('User logged in: userId:', sessionCookie.userId, 'role:', sessionCookie.role); // Minimized logging
+    console.log('Updated isLoggedInSubject:', this.isLoggedInSubject.value);
+    console.log('Updated userSubject:', this.userSubject.value);
   }
+
 
   logoutUser(): void {
     this.cookieService.deleteAll();
     this.isLoggedInSubject.next(false);
     this.userSubject.next(null);
+
+    console.log('User logged out');
+    console.log('Updated isLoggedInSubject:', this.isLoggedInSubject.value);
+    console.log('Updated userSubject:', this.userSubject.value);
   }
 }

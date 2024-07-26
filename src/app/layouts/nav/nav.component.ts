@@ -32,7 +32,6 @@ export class NavComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.authSubscription = this.authService.isLoggedIn().subscribe((loggedIn) => {
       this.isSignedIn = loggedIn;
-      console.log('Is Signed In:', this.isSignedIn);
       this.setUserDetails();
     });
   }
@@ -50,7 +49,11 @@ export class NavComponent implements OnInit, OnDestroy {
         const user = JSON.parse(sessionUser);
         this.appUser = { fullName: user.firstName + ' ' + user.lastName, role: user.role };
         this.isAdmin = user.role === 'admin';
-        console.log('Signed in as', this.appUser.fullName);
+        console.log('Signed in as', this.appUser.fullName, 'with role', this.appUser.role); // Log the user details and role
+  
+        if (this.isAdmin) {
+        } else {
+        }
       } else {
         console.log('No session user found in cookies.');
       }
@@ -60,6 +63,7 @@ export class NavComponent implements OnInit, OnDestroy {
       console.log('User is not signed in.');
     }
   }
+  
 
   signout(): void {
     console.log('Clearing cookies');
@@ -71,6 +75,5 @@ export class NavComponent implements OnInit, OnDestroy {
   }
 
   logDropdownToggle(): void {
-    console.log('Dropdown toggle clicked');
   }
 }

@@ -2,7 +2,7 @@
  * Title: my-profile.component.ts
  * Author: Professor Richard Krasso and Brock Hemsouvanh
  * Date: 07/18/2024
- * Updated: 07/24/2024 by Brock Hemsouvanh
+ * Updated: 07/25/2024 by Brock Hemsouvanh
  * Description: Component for managing the user's profile
  */
 
@@ -12,6 +12,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { EmployeeService } from '../services/employee.service';
 import { CookieService } from 'ngx-cookie-service';
+import { User } from '../models/user.model';
 
 @Component({
   selector: 'app-my-profile',
@@ -20,7 +21,7 @@ import { CookieService } from 'ngx-cookie-service';
 })
 export class MyProfileComponent implements OnInit {
   profileForm: FormGroup;
-  employee: any = {};
+  employee: User = {} as User;
   errorMessage: string = ''; // Initialize with an empty string
   successMessage: string = ''; // Initialize with an empty string
 
@@ -83,8 +84,9 @@ export class MyProfileComponent implements OnInit {
   saveChanges(): void {
     if (this.profileForm.valid) {
       const { address, phoneNumber } = this.profileForm.value;
+      const updatedUser: User = { ...this.employee, address, phoneNumber };
       // Call the service to update employee profile
-      this.employeeService.updateEmployeeProfile(this.employee.email, address, phoneNumber).subscribe(
+      this.employeeService.updateEmployeeProfile(updatedUser).subscribe(
         res => {
           this.successMessage = 'Profile updated successfully!'; // Handle success
           // Optionally refresh the data to reflect changes immediately
