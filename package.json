@@ -9,7 +9,8 @@
     "build": "ng build",
     "server": "nodemon ./bin/www",
     "client": "ng serve --open",
-    "dev": "ts-node src/app.ts"
+    "dev": "ts-node src/app.ts",
+    "render-deploy": "ng build --configuration=production"
   },
   "dependencies": {
     "@angular/animations": "^16.2.3",

@@ -5,7 +5,6 @@ node_modules/
 .angular/cache/
 
 # Output directory
-dist/
 build/
 
 # Environment files
