@@ -5,7 +5,10 @@
  * Description: Invoice Summary component logic for BCRS application
  */
 
+'use strict';
+
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-invoice-summary',
@@ -13,31 +16,39 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./invoice-summary.component.css']
 })
 export class InvoiceSummaryComponent implements OnInit {
-  customerName: string;
-  customerEmail: string;
-  orderDate: string;
-  servicePrice: number;
-  partsAmount: number;
-  laborAmount: number;
-  invoiceTotal: number;
+  customerName!: string;
+  customerEmail!: string;
+  orderDate!: string;
+  lineItems: { name: string, price: number }[] = [];
+  partsAmount!: number;
+  laborAmount!: number;
+  invoiceTotal!: number;
 
-  constructor() {
-    this.customerName = 'John Doe';
-    this.customerEmail = 'johndoe@example.com';
-    this.orderDate = new Date().toISOString().split('T')[0];
-    this.servicePrice = 99.99;
-    this.partsAmount = 49.99;
-    this.laborAmount = 50.00;
-    this.invoiceTotal = this.calculateInvoiceTotal();
+  constructor(private router: Router) {
+    const navigation = this.router.getCurrentNavigation();
+    const state = navigation?.extras.state as {
+      invoice: {
+        fullName: string,
+        email: string,
+        orderDate: string,
+        lineItems: { name: string, price: number }[],
+        partsAmount: number,
+        laborAmount: number,
+        invoiceTotal: number
+      }
+    };
+    if (state) {
+      this.customerName = state.invoice.fullName;
+      this.customerEmail = state.invoice.email;
+      this.orderDate = state.invoice.orderDate;
+      this.lineItems = state.invoice.lineItems;
+      this.partsAmount = state.invoice.partsAmount;
+      this.laborAmount = state.invoice.laborAmount;
+      this.invoiceTotal = state.invoice.invoiceTotal;
+    }
   }
 
-  ngOnInit(): void {
-    // Initialization logic if needed
-  }
-
-  calculateInvoiceTotal(): number {
-    return this.servicePrice + this.partsAmount + this.laborAmount;
-  }
+  ngOnInit(): void {}
 
   printInvoice(): void {
     window.print();

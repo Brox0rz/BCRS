@@ -7,8 +7,11 @@
  * where users can select services and enter additional costs, automatically updating the invoice total.
  */
 
+'use strict';
+
 import { Component, OnInit, Renderer2 } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { InvoiceService } from '../services/invoice.service';
 
 @Component({
@@ -21,7 +24,12 @@ export class ServiceRequestComponent implements OnInit {
   lineItemTotal: number = 0;
   invoiceTotal: number = 0;
 
-  constructor(private fb: FormBuilder, private invoiceService: InvoiceService, private renderer: Renderer2) { 
+  constructor(
+    private fb: FormBuilder, 
+    private invoiceService: InvoiceService, 
+    private renderer: Renderer2,
+    private router: Router
+  ) { 
     // Form initialization with validation rules
     this.serviceRequestForm = this.fb.group({
       customerFirstName: ['', Validators.required],
@@ -115,6 +123,7 @@ export class ServiceRequestComponent implements OnInit {
     this.invoiceService.createInvoice(invoiceData).subscribe({
       next: (response) => {
         console.log('Invoice created successfully', response);
+        this.router.navigate(['/invoice-summary'], { state: { invoice: invoiceData } });
       },
       error: (err) => {
         console.error('Error creating invoice', err);
