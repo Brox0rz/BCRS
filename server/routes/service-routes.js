@@ -107,9 +107,9 @@ router.get("/purchases-graph", async (req, res) => {
  *                     - name
  *                     - price
  *               partsAmount:
- *                 type: integer
+ *                 type: number
  *               laborAmount:
- *                 type: integer
+ *                 type: number
  *               lineItemTotal:
  *                 type: number
  *               invoiceTotal: 
@@ -144,15 +144,17 @@ const invoiceSchema = {
         required: ['name', 'price']
       }
     },
-    partsAmount: { type: 'integer' },
-    laborAmount: { type: 'integer' },
+    partsAmount: { type: 'number' },
+    laborAmount: { type: 'number' },
     lineItemTotal: { type: 'number' },
     invoiceTotal: { type: 'number' },
-    orderDate: { type: 'string' }
+    orderDate: { type: 'string' },
+    additionalPartsServices: { type: 'string', default: '' }  // Form can be submitted with these fields being left blank
   },
   required: ['email', 'fullName', 'lineItems', 'partsAmount', 'laborAmount', 'lineItemTotal', 'invoiceTotal', 'orderDate'],
   additionalProperties: false
 };
+
 
 router.post("/", async (req, res) => {
   console.log("Lets create a new invoice!");

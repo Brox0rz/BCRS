@@ -2,6 +2,7 @@
  * Title: user.model.ts
  * Author: Brock Hemsouvanh
  * Date: 07/24/2024
+ * Updated: 07/28/2024 by Brock Hemsouvanh
  * Description: User model for BCRS.
  */
 

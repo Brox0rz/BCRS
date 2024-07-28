@@ -43,9 +43,9 @@ export class SigninComponent {
   signIn(): void {
     if (this.signinForm.valid) {
       this.isLoading = true;
-
+  
       const { email, password } = this.signinForm.value;
-
+  
       if (!email) {
         this.errMessage = 'Please provide your email address';
         this.isLoading = false;
@@ -59,22 +59,24 @@ export class SigninComponent {
       
       this.secService.signin(email, password).subscribe({
         next: (user: any) => {
-          console.log('user', user);
           this.authService.loginUser(user); // Use AuthService to log in the user
-          this.isLoading = false;
           this.router.navigate(['/service-request']);
+          this.isLoading = false;
         },
         error: (err) => {
           this.isLoading = false;
-          console.log('err', err);
-          if (err.error.status === 400) {
-            this.errMessage = 'Invalid email and/or password. Please try again.'
-            return;
+          // General error message for authentication failure
+          if (err.status === 401 || err.status === 404) { // Typically 401 for unauthorized
+            this.errMessage = 'Invalid email or password. Please try again.';
+          } else {
+            this.errMessage = 'Something went wrong. Please try again later.';
+            console.error('Error during sign in:', err);
           }
         }
       });
     }
   }
+  
 
   toggleFieldTextType(): void {
     this.fieldTextType = !this.fieldTextType;

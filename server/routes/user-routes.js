@@ -2,12 +2,11 @@
  * Title: user-routes.js
  * Author: Professor Richard Krasso and Brock Hemsouvanh
  * Date: 7/05/24
- * Updated: 07/19/2024 by Brock Hemsouvanh
+ * Updated: 07/28/2024 by Brock Hemsouvanh
  * Description: Routes for handling user-related API requests
  * 
  * This code was developed with reference to the article on using bcrypt in Node.js:
  * https://www.freecodecamp.org/news/how-to-hash-passwords-with-bcrypt-in-nodejs/
- * 
  */
 
 'use strict';
@@ -205,7 +204,7 @@ router.get('/', (req, res, next) => {
   console.log('Fetching all users...');
   try {
     mongo(async db => {
-      const users = await db.collection('users').find({}, { projection: { _id: 1, firstName: 1, lastName: 1, email: 1, password: 1, phoneNumber: 1, address: 1, isDisabled: 1, role: 1, selectedSecurityQuestions: 1 } })
+      const users = await db.collection('users').find({}, { projection: { _id: 1, userId: 1, firstName: 1, lastName: 1, email: 1, password: 1, phoneNumber: 1, address: 1, isDisabled: 1, role: 1, selectedSecurityQuestions: 1 } })
         .sort({ _id: 1 })
         .toArray();
 
@@ -256,7 +255,7 @@ router.get('/:userId', (req, res, next) => {
     mongo(async db => {
       const user = await db.collection('users').findOne(
         { _id: userId },
-        { projection: { _id: 1, firstName: 1, lastName: 1, email: 1, role: 1, address: 1, phoneNumber: 1 } }
+        { projection: { _id: 1, userId: 1, firstName: 1, lastName: 1, email: 1, role: 1, address: 1, phoneNumber: 1 } }
       );
 
       if (!user) {
@@ -267,7 +266,9 @@ router.get('/:userId', (req, res, next) => {
         return;
       }
 
-      res.send(user);
+      // Return user with ID as a string
+      const userWithId = { ...user, _id: userId.toString() };
+      res.send(userWithId);
     }, next);
   } catch (e) {
     console.error(e);
@@ -344,24 +345,30 @@ router.put('/:userId', (req, res, next) => {
   }
 });
 
-
-
 /**
  * @swagger
- * /api/users/profile/{email}:
- *   get:
- *     summary: Get user profile by email
+ * /api/users/reset-password-by-id/{userId}:
+ *   put:
+ *     summary: Reset user password by user ID
  *     tags: [User]
  *     parameters:
  *       - in: path
- *         name: email
+ *         name: userId
  *         schema:
  *           type: string
  *         required: true
- *         description: The email of the user to fetch profile data
+ *         description: The ID of the user to reset the password
  *     responses:
  *       200:
- *         description: User profile retrieved successfully
+ *         description: Password has been reset successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   description: Success message
  *       400:
  *         description: Bad Request
  *       404:
@@ -369,75 +376,27 @@ router.put('/:userId', (req, res, next) => {
  *       500:
  *         description: Internal Server Error
  */
-router.get('/profile/:email', async (req, res) => {
+router.put('/reset-password-by-id/:userId', async (req, res) => {
   try {
-    const email = req.params.email;
+    const { userId } = req.params;
+    if (!ObjectId.isValid(userId)) {
+      return res.status(400).send({ message: "Invalid userId" });
+    }
+
+    // Generate a hashed password for the new default password
+    const newHashedPassword = await bcrypt.hash('Password01', 10);
 
     await mongo(async (db) => {
-      const user = await db.collection('users').findOne({ email });
-
-      if (!user) {
-        return res.status(404).send({ message: 'User not found' });
-      }
-
-      res.status(200).send(user);
-    });
-  } catch (e) {
-    console.error(e);
-    res.status(500).send({ message: `Internal Server Error: ${e.message}` });
-  }
-});
-
-/**
- * @swagger
- * /api/users/profile/{email}/update-profile:
- *   put:
- *     summary: Update user profile by email
- *     tags: [User]
- *     parameters:
- *       - in: path
- *         name: email
- *         schema:
- *           type: string
- *         required: true
- *         description: The email of the user to update profile data
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               address:
- *                 type: string
- *               phoneNumber:
- *                 type: string
- *     responses:
- *       204:
- *         description: Profile updated successfully
- *       400:
- *         description: Bad Request
- *       404:
- *         description: Not Found
- *       500:
- *         description: Internal Server Error
- */
-router.put('/profile/:email/update-profile', async (req, res) => {
-  try {
-    const email = req.params.email;
-    const updateData = req.body;
-
-    await mongo(async (db) => {
-      const result = await db.collection('users').updateOne(
-        { email },
-        { $set: updateData }
+      const result = await db.collection("users").updateOne(
+        { _id: new ObjectId(userId) },
+        { $set: { password: newHashedPassword } }
       );
 
-      if (result.matchedCount === 0) {
-        return res.status(404).send({ message: 'User not found' });
+      if (result.modifiedCount === 0) {
+        return res.status(404).send({ message: "User not found with the provided userId" });
       }
 
-      res.status(204).send();
+      res.status(200).send({ message: "Password has been reset successfully to 'Password01' for the given user ID." });
     });
   } catch (e) {
     console.error(e);

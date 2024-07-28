@@ -2,12 +2,13 @@
  * Title: service-request.component.ts
  * Author: Brock Hemsouvanh
  * Date: 07/21/2024
- * Updated: 07/26/2024 by Brock Hemsouvanh
- * Description: Service Request component logic for BCRS application
+ * Updated: 07/28/2024 by Brock Hemsouvanh
+ * Description: Service Request component logic for BCRS application. This component handles the form for service requests
+ * where users can select services and enter additional costs, automatically updating the invoice total.
  */
 
-import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
+import { Component, OnInit, Renderer2 } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { InvoiceService } from '../services/invoice.service';
 
 @Component({
@@ -20,7 +21,8 @@ export class ServiceRequestComponent implements OnInit {
   lineItemTotal: number = 0;
   invoiceTotal: number = 0;
 
-  constructor(private fb: FormBuilder, private invoiceService: InvoiceService) { // Inject InvoiceService
+  constructor(private fb: FormBuilder, private invoiceService: InvoiceService, private renderer: Renderer2) { 
+    // Form initialization with validation rules
     this.serviceRequestForm = this.fb.group({
       customerFirstName: ['', Validators.required],
       customerLastName: ['', Validators.required],
@@ -28,14 +30,25 @@ export class ServiceRequestComponent implements OnInit {
       orderDate: ['', Validators.required],
       partsAmount: [0, Validators.min(0)],
       laborAmount: [0, Validators.min(0)],
-      additionalPartsServices: [''],
-      services: this.fb.array([]) // Add a form array for services
+      additionalPartsServices: ['']
     });
   }
 
   ngOnInit(): void {
+    // Subscribe to form changes to recalculate totals
     this.serviceRequestForm.valueChanges.subscribe(() => {
       this.calculateTotals();
+    });
+    this.setupCheckboxListeners();
+  }
+
+  // Setup real-time calculation when checkboxes change
+  setupCheckboxListeners() {
+    const checkboxes = document.querySelectorAll('.form-check-input');
+    checkboxes.forEach((checkbox) => {
+      this.renderer.listen(checkbox, 'change', () => {
+        this.calculateTotals();
+      });
     });
   }
 
@@ -86,8 +99,16 @@ export class ServiceRequestComponent implements OnInit {
   calculateTotals(): void {
     const formValues = this.serviceRequestForm.value;
     const selectedServices = this.getSelectedServices();
-    this.lineItemTotal = this.calculateLineItemTotal(selectedServices);
-    this.invoiceTotal = this.calculateInvoiceTotal(formValues.partsAmount, formValues.laborAmount, selectedServices);
+    const additionalCosts = this.parseAdditionalCosts(formValues.additionalPartsServices);
+
+    this.lineItemTotal = this.calculateLineItemTotal(selectedServices) + additionalCosts;
+    this.invoiceTotal = this.calculateInvoiceTotal(formValues.partsAmount, formValues.laborAmount, selectedServices) + additionalCosts;
+  }
+
+  parseAdditionalCosts(additionalText: string): number {
+    const costMatches = additionalText.match(/\d+/g);
+    const costs = costMatches ? costMatches.map(Number) : [];
+    return costs.reduce((acc, cur) => acc + cur, 0);
   }
 
   createInvoice(invoiceData: any): void {

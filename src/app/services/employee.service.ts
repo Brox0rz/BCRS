@@ -2,7 +2,7 @@
  * Title: employee.service.ts
  * Author: Brock Hemsouvanh
  * Date: 07/18/2024
- * Updated: 07/25/2024 by Brock Hemsouvanh
+ * Updated: 07/28/2024 by Brock Hemsouvanh
  * Description: Service for handling employee-related API requests
  */
 
@@ -57,10 +57,10 @@ export class EmployeeService {
 
   /**
    * Method to delete a user by ID
-   * @param userId - The ID of the user to delete
+   * @param id - The ID of the user to delete
    * @returns Observable<any> - The response from the API
    */
-  deleteUser(userId: string): Observable<any> {
-    return this.http.delete(`${this.apiUrl}/${userId}`);
+  deleteUser(id: string): Observable<any> {
+    return this.http.delete(`${this.apiUrl}/${id}`);
   }
 }

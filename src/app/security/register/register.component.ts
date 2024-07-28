@@ -115,7 +115,7 @@ export class RegisterComponent implements OnInit {
 
     this.securityService.register(this.user).subscribe({
       next: (result) => {
-        this.router.navigate(['/security/signin']);
+        this.router.navigate(['/signin']);
       },
       error: (err) => {
         if (err.error.message) {
